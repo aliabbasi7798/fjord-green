@@ -105,7 +105,7 @@ hyper-parameters (see all hyper-parameters values in the appendix of the paper)
 ```train
 python3  python run_experiment.py cifar10 FedAvg \
     --n_learners 1 \
-    --n_rounds 200 \
+    --n_rounds 20 \
     --bz 128 \
     --lr 0.01 \
     --lr_scheduler multi_step \

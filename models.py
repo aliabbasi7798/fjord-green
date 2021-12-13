@@ -70,39 +70,6 @@ class FjordFemnistCNN(nn.Module):
         mask[:int(N * dropout_rate)] = True
         return mask
 
-    # def get_stop_idx(self, layer, type="conv", dropout_rate=None):
-    #     stop_idx = -1
-    #     if dropout_rate is None:
-    #         stop_idx = -1
-    #     else:
-    #         if type == "conv":
-    #             stop_idx = int(layer.weight.shape[0] * dropout_rate)
-    #         elif type == "lin":
-    #             stop_idx = int(layer.weight.shape[1] * dropout_rate)
-    #     return stop_idx
-
-    # def forward(self, x):
-    #     x = F.conv2d(
-    #         x,
-    #         self._masked(self.conv1.weight),
-    #         self._masked(self.conv1.bias),
-    #         1,  # stride
-    #         2  # padding
-    #     )
-    #     x = self.pool(F.relu(x))
-    #     x = F.conv2d(
-    #         x,
-    #         self._masked(self.conv2.weight, self.conv1.weight),
-    #         self._masked(self.conv2.bias),
-    #         1,  # stride
-    #         2  # padding
-    #     )
-    #     x = self.pool(F.relu(x))
-    #     x = x.view(x.size(0), -1)
-    #     x = F.linear(x, self._masked(self.fc1.weight, dim=1), self.fc1.bias)
-    #
-    #     # return x
-
     def compute_masks(self):
         self.conv1.weight.mask = self._get_mask(self.conv1.weight, dropout_rate=self.p)
         self.conv1.bias.mask = self._get_mask(self.conv1.bias, dropout_rate=self.p)

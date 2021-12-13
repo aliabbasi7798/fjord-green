@@ -1,5 +1,0 @@
-#   FJORD :
-        client :
-          . self.max_cap, self.possible_p_list = functions.select_max_cap(k=k)
-          . self.max_cap //maximum capability of a client
-          . self.possible_p_list //list of all possible p_values a client can hold based on his max_cap

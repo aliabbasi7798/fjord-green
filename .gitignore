@@ -2,6 +2,9 @@
 .idea/
 logs/
 chkpts/
+data/cifar10/raw_data
+data/emnist/raw_data
+data/emnist/all_data
 
 # Don't track files with these extensioons
 *.ipynb
@@ -70,4 +73,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+#files
+debug.py
 

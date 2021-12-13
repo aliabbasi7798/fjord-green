@@ -321,18 +321,9 @@ class CentralizedAggregator(Aggregator):
                         self.global_learners_ensemble[learner_id].model.parameters()
                     )
 
-
-# def fjord_average_learners(learners, learner, weights):
-#     if weights is None:
-#         n_learners = len(learners)
-#         weights = (1 / n_learners) * torch.ones(n_learners, device=learners[0].device)
-#
-#     else:
-#         weights = weights.to(learners[0].device)
-
-
 class FjordAggregator(Aggregator):
-    r""" Aggregator for Fjord problem.
+    r"""
+    Aggregator for Fjord .
 
     """
     #for each round apply this
@@ -344,8 +335,8 @@ class FjordAggregator(Aggregator):
 
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
-            # average_learners(learners, learner, weights=self.clients_weights)
-            fjord_average_learners(learners, learner)
+
+            fjord_average_learners(learners, learner, weights=self.clients_weights)
 
         # assign the updated model to all clients
         self.update_clients()

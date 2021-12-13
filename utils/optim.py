@@ -156,9 +156,9 @@ def get_optimizer(optimizer_name, model, lr_initial, mu=0.):
     elif optimizer_name == "sgd":
         return optim.SGD(
             [param for param in model.parameters() if param.requires_grad],
-            lr=lr_initial,
-            momentum=0.9,
-            weight_decay=5e-4
+            lr=lr_initial
+            # momentum=0.9,
+            # weight_decay=5e-4
         )
 
     elif optimizer_name == "prox_sgd":

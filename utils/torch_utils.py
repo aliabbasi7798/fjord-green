@@ -26,64 +26,63 @@ def mask_layer_cnn(param, key, p):
 
 
 def fjord_average_learners(learners,
-            target_learner,
-            weights=None,
-            average_params=True,
-            average_gradients=False):
+                           target_learner,
+                           weights=None,
+                           average_params=True,
+                           average_gradients=False):
+    if not average_params and not average_gradients:
+        return
 
+    if weights is None:
+        n_learners = len(learners)
+        weights = (1 / n_learners) * torch.ones(n_learners, device=learners[0].device)
 
-        if not average_params and not average_gradients:
-            return
+    else:
+        weights = weights.to(learners[0].device)
 
-        if weights is None:
-            n_learners = len(learners)
-            weights = (1 / n_learners) * torch.ones(n_learners, device=learners[0].device)
+    target_state_dict = target_learner.model.state_dict(keep_vars=True)
 
-        else:
-            weights = weights.to(learners[0].device)
+    masks = {}
+    for key in target_state_dict:
 
-        target_state_dict = target_learner.model.state_dict(keep_vars=True)
+        if target_state_dict[key].data.dtype == torch.float32:
 
-        masks = {}
-        for key in target_state_dict:
+            if average_params:
+                target_state_dict[key].data.fill_(0.)
 
-            if target_state_dict[key].data.dtype == torch.float32:
+            if average_gradients:
+                target_state_dict[key].grad = target_state_dict[key].data.clone()
+                target_state_dict[key].grad.data.fill_(0.)
+
+            for learner_id, learner in enumerate(learners):
+                state_dict = learner.model.state_dict(keep_vars=True)
 
                 if average_params:
-                    target_state_dict[key].data.fill_(0.)
+                    mask = mask_layer_cnn(state_dict[key].data, key, learner.model.p)
+                    if key in masks:
+                        masks[key] += mask
+                    else:
+                        masks[key] = mask
+                    target_state_dict[key].data += state_dict[key].data.clone() * mask
 
                 if average_gradients:
-                    target_state_dict[key].grad = target_state_dict[key].data.clone()
-                    target_state_dict[key].grad.data.fill_(0.)
-
-                for learner_id, learner in enumerate(learners):
-                    state_dict = learner.model.state_dict(keep_vars=True)
-
-                    if average_params:
-                        mask = mask_layer_cnn(state_dict[key].data, key, learner.model.p)
-                        if key in masks:
-                            masks[key] += mask
-                        else:
-                            masks[key] = mask
-                        target_state_dict[key].data += state_dict[key].data.clone() * mask
-
-                    if average_gradients:
-                        if state_dict[key].grad is not None:
-                            target_state_dict[key].grad += weights[learner_id] * state_dict[key].grad.clone()
-                        elif state_dict[key].requires_grad:
-                            warnings.warn(
-                                "trying to average_gradients before back propagation,"
-                                " you should set `average_gradients=False`."
-                            )
-                target_state_dict[key].data /= masks[key]
+                    if state_dict[key].grad is not None:
+                        target_state_dict[key].grad += weights[learner_id] * state_dict[key].grad.clone()
+                    elif state_dict[key].requires_grad:
+                        warnings.warn(
+                            "trying to average_gradients before back propagation,"
+                            " you should set `average_gradients=False`."
+                        )
+            target_state_dict[key].data /= masks[key]
 
 
-            else:
-                # tracked batches
-                target_state_dict[key].data.fill_(0)
-                for learner_id, learner in enumerate(learners):
-                    state_dict = learner.model.state_dict()
-                    target_state_dict[key].data += state_dict[key].data.clone()
+        else:
+            # tracked batches
+            target_state_dict[key].data.fill_(0)
+            for learner_id, learner in enumerate(learners):
+                state_dict = learner.model.state_dict()
+                target_state_dict[key].data += state_dict[key].data.clone()
+
 
 def average_learners(
         learners,
@@ -173,8 +172,8 @@ def partial_average(learners, average_learner, alpha):
     for key in source_state_dict:
         if source_state_dict[key].data.dtype == torch.float32:
             for target_state_dict in target_state_dicts:
-                target_state_dict[key].data =\
-                    (1-alpha) * target_state_dict[key].data + alpha * source_state_dict[key].data
+                target_state_dict[key].data = \
+                    (1 - alpha) * target_state_dict[key].data + alpha * source_state_dict[key].data
 
 
 def differentiate_learner(target, reference_state_dict, coeff=1.):
@@ -193,7 +192,6 @@ def differentiate_learner(target, reference_state_dict, coeff=1.):
 
     for key in target_state_dict:
         if target_state_dict[key].data.dtype == torch.float32:
-
             target_state_dict[key].grad = \
                 coeff * (target_state_dict[key].data.clone() - reference_state_dict[key].data.clone())
 
@@ -261,5 +259,3 @@ def simplex_projection(v, s=1):
     w = (w * (w > 0)).clip(min=0)
 
     return w
-
-
