@@ -1,4 +1,4 @@
-# Federated learningunder heterogeneous Systems
+# Federated learning under heterogeneous Systems
 
 This repository is the official implementation of [Federated Multi-Task Learning under a Mixture of Distributions](https://arxiv.org/abs/2108.10252).
 and Fjord.
@@ -105,7 +105,7 @@ Fjord on emnist dataset experiment
     --seed 1234 \
     --logs_root ./logs \
     --verbose 1\
-    --k 5\
+    --k 4\
     --sampling_rate 0.1
 ```
 

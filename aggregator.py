@@ -335,8 +335,8 @@ class FjordAggregator(Aggregator):
     def mix(self):
         self.sample_clients()
 
-        # for client in self.sampled_clients:
-        #     client.step()
+        for client in self.sampled_clients:
+            client.step()
 
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
