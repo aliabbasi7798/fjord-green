@@ -158,7 +158,7 @@ def run_experiment(args_):
     pbar = tqdm(total=args_.n_rounds)
     current_round = 0
     while current_round <= args_.n_rounds:
-        print(f"this is round number : {current_round} ")
+     #   print(f"this is round number : {current_round} ")
         aggregator.mix()
 
         if aggregator.c_round != current_round:

@@ -50,13 +50,11 @@ def mask_layer3(param, p=.5):
 
 
 if __name__ == "__main__":
-    # model = FjordFemnistCNN(10)
-    # input = torch.randn(1, 1, 28, 28)
-    # output = model(input, p=0.5)
-    # print(output)
-    to = torch.ones([10,1,5,5])
-    mask = mask_layer1(to,p=0.5)
-    print(mask)
+    model = FjordFemnistCNN(10)
+    input = torch.randn(1, 1, 28, 28)
+    output = model(input, p=0.5)
+    print(output)
+
 
 
 

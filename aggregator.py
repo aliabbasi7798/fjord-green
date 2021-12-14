@@ -67,6 +67,7 @@ class Aggregator(ABC):
     load_state
 
     """
+
     def __init__(
             self,
             clients,
@@ -108,7 +109,7 @@ class Aggregator(ABC):
         self.n_test_clients = len(test_clients)
         self.n_learners = len(self.global_learners_ensemble)
 
-        self.clients_weights =\
+        self.clients_weights = \
             torch.tensor(
                 [client.n_train_samples for client in self.clients],
                 dtype=torch.float32
@@ -164,7 +165,7 @@ class Aggregator(ABC):
             for client_id, client in enumerate(clients):
 
                 train_loss, train_acc, test_loss, test_acc = client.write_logs()
-
+                # print(f"train_loss {train_loss}, train_acc {train_acc}, test_loss {test_loss}, test_acc {test_acc}")
                 if self.verbose > 1:
                     print("*" * 30)
                     print(f"Client {client_id}..")
@@ -273,6 +274,7 @@ class NoCommunicationAggregator(Aggregator):
     r"""Clients do not communicate. Each client work locally
 
     """
+
     def mix(self):
         self.sample_clients()
 
@@ -292,7 +294,8 @@ class CentralizedAggregator(Aggregator):
     r""" Standard Centralized Aggregator.
      All clients get fully synchronized with the average client.
     """
-    #for each round apply this 
+
+    # for each round apply this
     def mix(self):
         self.sample_clients()
 
@@ -321,21 +324,22 @@ class CentralizedAggregator(Aggregator):
                         self.global_learners_ensemble[learner_id].model.parameters()
                     )
 
+
 class FjordAggregator(Aggregator):
     r"""
     Aggregator for Fjord .
 
     """
-    #for each round apply this
+
+    # for each round apply this
     def mix(self):
         self.sample_clients()
 
-        for client in self.sampled_clients:
-            client.step()
+        # for client in self.sampled_clients:
+        #     client.step()
 
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
-
             fjord_average_learners(learners, learner, weights=self.clients_weights)
 
         # assign the updated model to all clients
@@ -362,6 +366,7 @@ class PersonalizedAggregator(CentralizedAggregator):
     Clients do not synchronize there models, instead they only synchronize optimizers, when needed.
 
     """
+
     def update_clients(self):
         for client in self.clients:
             for learner_id, learner in enumerate(client.learners_ensemble):
@@ -373,6 +378,7 @@ class APFLAggregator(Aggregator):
     """
 
     """
+
     def __init__(
             self,
             clients,
@@ -499,7 +505,7 @@ class LoopLessLocalSGDAggregator(PersonalizedAggregator):
                 partial_average(
                     learners,
                     average_learner=learner,
-                    alpha=self.penalty_parameter/self.communication_probability
+                    alpha=self.penalty_parameter / self.communication_probability
                 )
 
                 self.update_clients()
@@ -522,6 +528,7 @@ class ClusteredAggregator(Aggregator):
 
      Follows implementation from https://github.com/felisat/clustered-federated-learning
     """
+
     def __init__(
             self,
             clients,
@@ -639,6 +646,7 @@ class AgnosticAggregator(CentralizedAggregator):
      `Agnostic Federated Learning`__(https://arxiv.org/pdf/1902.00146.pdf).
 
     """
+
     def __init__(
             self,
             clients,
@@ -710,6 +718,7 @@ class FFLAggregator(CentralizedAggregator):
      `FAIR RESOURCE ALLOCATION IN FEDERATED LEARNING`__(https://arxiv.org/pdf/1905.10497.pdf)
 
     """
+
     def __init__(
             self,
             clients,
@@ -756,7 +765,7 @@ class FFLAggregator(CentralizedAggregator):
             average_learners(
                 learners=learners,
                 target_learner=learner,
-                weights=hs*torch.ones(len(learners)),
+                weights=hs * torch.ones(len(learners)),
                 average_params=False,
                 average_gradients=True
             )

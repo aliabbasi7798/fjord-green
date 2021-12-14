@@ -100,7 +100,7 @@ class Client(object):
 
     def step(self, single_batch_flag=False, *args, **kwargs):
         """
-        perform on step for the client
+        perform one step for the client
 
         :param single_batch_flag: if true, the client only uses one batch to perform the update
         :return

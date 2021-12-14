@@ -90,12 +90,8 @@ class FjordFemnistCNN(nn.Module):
             1,  # stride
             2  # padding
         )
-
         x = self.pool(F.relu(x))
-
         # Second conv
-        # previous_stop_idx = stop_idx
-        # stop_idx = self.get_stop_idx(self.conv2, type="conv", dropout_rate=p)
         x = F.conv2d(
             x,
             self._masked(self.conv2.weight, self.conv1.weight),
@@ -104,11 +100,8 @@ class FjordFemnistCNN(nn.Module):
             2  # padding
         )
         x = self.pool(F.relu(x))
-
         x = x.view(x.size(0), -1)
-        # stop_idx = self.get_stop_idx(self.fc1, type="lin", dropout_rate=p)
         x = F.linear(x, self._masked(self.fc1.weight, dim=1), self.fc1.bias)
-
         return x
 
 
@@ -219,6 +212,7 @@ def get_resnet34(n_classes):
 
     return model
 
+
 class FjordFemnistCNN2(nn.Module):
     """
         Implements a model with two convolutional layers followed by pooling, and a final dense layer with 10 units.
@@ -326,6 +320,5 @@ class FjordFemnistCNN(nn.Module):
         x = F.linear(x, self.fc1.weight[:, :stop_idx], self.fc1.bias)
 
         return x
-
 
 '''

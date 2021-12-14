@@ -5,12 +5,12 @@ import torch.nn as nn
 
 
 def mask_layer_cnn(param, key, p):
-    mask_w = torch.ones(param.shape)
+    mask_w = torch.ones(param.shape, device=param.data.device)
     stop_idx = int(mask_w.size(0) * p)
     if key == 'fc1.bias':
         return mask_w
     if key.find('bias') != -1:
-        mask_b = torch.ones(param.shape)
+        mask_b = torch.ones(param.shape, device=param.data.device)
         stop_idx = int(mask_b.size(0) * p)
         mask_b[stop_idx:] = 0
         return mask_b
