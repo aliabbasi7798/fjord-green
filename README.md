@@ -25,7 +25,8 @@ In addition to the trivial baseline consisting of training models locally withou
 any collaboration, this repository supports the following federated learning
 algorithms:
 
-* FjORD ([Leontiadis et al. 2021] (https://arxiv.org/abs/2102.13451))
+
+* FjORD ([Leontiadis et al. 2021](https://arxiv.org/abs/2102.13451))
 * FedAvg ([McMahan et al. 2017](http://proceedings.mlr.press/v54/mcmahan17a.html))
 * FdProx ([Li et al. 2018](https://arxiv.org/abs/1812.06127))
 * Clustered FL ([Sattler et al. 2019](https://ieeexplore.ieee.org/abstract/document/9174890))
