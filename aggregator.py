@@ -146,7 +146,9 @@ class Aggregator(ABC):
 
     def write_logs(self):
         self.update_test_clients()
-
+        tr_acc=[]
+        tr_loss=[]
+        tr_round=[]
         for global_logger, clients in [
             (self.global_train_logger, self.clients),
             (self.global_test_logger, self.test_clients)
@@ -195,7 +197,8 @@ class Aggregator(ABC):
                 print(f"Train Loss: {global_train_loss:.3f} | Train Acc: {global_train_acc * 100:.3f}% |", end="")
                 print(f"Test Loss: {global_test_loss:.3f} | Test Acc: {global_test_acc * 100:.3f}% |")
                 print("+" * 50)
-
+            tr_acc.append(global_train_acc)
+            tr_round.append(self.c_round)
             global_logger.add_scalar("Train/Loss", global_train_loss, self.c_round)
             global_logger.add_scalar("Train/Metric", global_train_acc, self.c_round)
             global_logger.add_scalar("Test/Loss", global_test_loss, self.c_round)
@@ -203,7 +206,7 @@ class Aggregator(ABC):
 
         if self.verbose > 0:
             print("#" * 80)
-
+        return tr_acc, tr_round
     def save_state(self, dir_path):
         """
         save the state of the aggregator, i.e., the state dictionary of each `learner` in `global_learners_ensemble`
@@ -284,7 +287,8 @@ class NoCommunicationAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            self.write_logs()
+            tr_acc, tr_round  = self.write_logs()
+        return tr_acc, tr_round
 
     def update_clients(self):
         pass
@@ -310,10 +314,10 @@ class CentralizedAggregator(Aggregator):
         self.update_clients()
 
         self.c_round += 1
-
+        tr_acc, tr_round = [] , []
         if self.c_round % self.log_freq == 0:
-            self.write_logs()
-
+            tr_acc, tr_round = self.write_logs()
+        return tr_acc, tr_round
     def update_clients(self):
         for client in self.clients:
             for learner_id, learner in enumerate(client.learners_ensemble):
@@ -333,6 +337,7 @@ class FjordAggregator(Aggregator):
 
     # for each round apply this
     def mix(self):
+        tr_acc, tr_round = [], []
         self.sample_clients()
 
         for client in self.sampled_clients:
@@ -348,8 +353,8 @@ class FjordAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            self.write_logs()
-
+            tr_acc, tr_round = self.write_logs()
+        return tr_acc, tr_round
     def update_clients(self):
         for client in self.clients:
             for learner_id, learner in enumerate(client.learners_ensemble):
@@ -434,8 +439,8 @@ class APFLAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            self.write_logs()
-
+            tr_acc, tr_round = self.write_logs()
+        return tr_acc, tr_round
     def update_clients(self):
         for client in self.clients:
 
@@ -496,7 +501,7 @@ class LoopLessLocalSGDAggregator(PersonalizedAggregator):
 
     def mix(self):
         communication_flag = self.np_rng.binomial(1, self.communication_probability, 1)
-
+        tr_acc, tr_round = [] , []
         if communication_flag:
             for learner_id, learner in enumerate(self.global_learners_ensemble):
                 learners = [client.learners_ensemble[learner_id] for client in self.clients]
@@ -513,13 +518,13 @@ class LoopLessLocalSGDAggregator(PersonalizedAggregator):
                 self.c_round += 1
 
                 if self.c_round % self.log_freq == 0:
-                    self.write_logs()
-
+                    tr_acc, tr_round = self.write_logs()
+                return tr_acc, tr_round
         else:
             self.sample_clients()
             for client in self.sampled_clients:
                 client.step(single_batch_flag=True)
-
+            return tr_acc, tr_round
 
 class ClusteredAggregator(Aggregator):
     """
@@ -623,8 +628,8 @@ class ClusteredAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            self.write_logs()
-
+            tr_acc, tr_round = self.write_logs()
+        return  tr_acc, tr_round
     def update_clients(self):
         for cluster_id, indices in enumerate(self.clusters_indices):
             cluster_learners = self.global_learners[cluster_id]
@@ -709,9 +714,8 @@ class AgnosticAggregator(CentralizedAggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            self.write_logs()
-
-
+            tr_acc, tr_round = self.write_logs()
+        return tr_acc, tr_round
 class FFLAggregator(CentralizedAggregator):
     """
     Implements q-FedAvg from
@@ -779,7 +783,8 @@ class FFLAggregator(CentralizedAggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            self.write_logs()
+            tr_acc, tr_round = self.write_logs()
+        return tr_acc, tr_round
 
 
 class DecentralizedAggregator(Aggregator):
@@ -849,4 +854,5 @@ class DecentralizedAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            self.write_logs()
+            tr_acc, tr_round = self.write_logs()
+        return tr_acc, tr_round

@@ -152,28 +152,74 @@ def run_experiment(args_):
             seed=args_.seed,
             k=args.k
         )
-
+    tr_acc, tr_round = [], []
     print("Training..")
     # just a progress bar 
     pbar = tqdm(total=args_.n_rounds)
     current_round = 0
     while current_round <= args_.n_rounds:
-        aggregator.mix()
-
+        tr_1, tr_2 = aggregator.mix()
+        if(len(tr_1) > 0):
+            tr_acc.append(tr_1[0])
+            tr_round.append(tr_2[0])
+        #print(1)
         if aggregator.c_round != current_round:
             pbar.update(1)
             current_round = aggregator.c_round
-
+        #print(2)
     if "save_path" in args_:
         save_root = os.path.join(args_.save_path)
-
+        #print(3)
         os.makedirs(save_root, exist_ok=True)
         aggregator.save_state(save_root)
-
+    return tr_acc, tr_round
 
 if __name__ == "__main__":
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
     args = parse_args()
-    run_experiment(args)
+    tr_acc, tr_round = run_experiment(args)
+
+    print(tr_acc)
+    print(tr_round)
+
+    import matplotlib
+    import matplotlib.pyplot as plt
+
+    matplotlib.use('Agg')
+    # Plot Loss curve
+    '''
+    plt.figure()
+    plt.title('Train accuracy')
+    # Plot Loss curve
+    plt.plot(tr_round, tr_acc, color='r', label='Fjord')
+
+    plt.legend()
+    plt.ylabel('test accuracy')
+    plt.xlabel('Communication Rounds')
+    plt.savefig('save/plot3.png')
+    # importing the csv module
+    '''
+    import csv
+    k = 0
+    # field names
+    fields = ['Train Accuracy', 'Rounds' , 'k']
+    rows = []
+    # data rows of csv file
+    for i in range(len(tr_round)):
+        rows.append([tr_round[i] , tr_acc[i] , k])
+
+    # name of csv file
+    filename = "do(k=avg).csv"
+
+    # writing to csv file
+    with open(filename, 'w') as csvfile:
+        # creating a csv writer object
+        csvwriter = csv.writer(csvfile)
+
+        # writing the fields
+        csvwriter.writerow(fields)
+
+        # writing the data rows
+        csvwriter.writerows(rows)

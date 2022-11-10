@@ -320,6 +320,7 @@ def get_emnist():
         emnist_data, emnist_targets
     """
     emnist_path = os.path.join("data", "emnist", "raw_data")
+    print(emnist_path)
     assert os.path.isdir(emnist_path), "Download EMNIST dataset!!"
 
     emnist_train =\
