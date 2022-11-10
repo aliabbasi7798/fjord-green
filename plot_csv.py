@@ -85,7 +85,7 @@ if __name__ == "__main__":
     #plt.plot(x3, y3, color='g', label='k=3')
     #plt.plot(x4, y4, color='c', label='k=4')
     plt.plot(x5, y5, color='k', label='Fjord , k=5')
-    plt.plot(x0, y0, color='g', label='FedAvg')
+    #plt.plot(x0, y0, color='g', label='FedAvg')
 
     plt.legend()
     plt.ylabel('train accuracy')
