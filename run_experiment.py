@@ -13,7 +13,7 @@ from utils.utils import *
 from utils.constants import *
 from utils.args import *
 
-from torch.utils.tensorboard import SummaryWriter
+from tensorboardX import SummaryWriter
 
 
 def init_clients(args_, root_path, logs_root):
@@ -70,11 +70,12 @@ def init_clients(args_, root_path, logs_root):
             logger=logger,
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
-            k=args_.k
+            k=args_.k,
+            green = random.randint(0,1)
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
         # max_cap the server send a F_max subnetwork
-
+        client.green_compute()
 
         clients_.append(client)
 
@@ -97,7 +98,8 @@ def run_experiment(args_):
         root_path=os.path.join(data_dir, "train"),
         logs_root=os.path.join(logs_root, "train")
     )
-
+    for c in clients:
+        print(c.k)
     print("==> Test Clients initialization..")
     test_clients = init_clients(
         args_,
@@ -154,7 +156,7 @@ def run_experiment(args_):
         )
     tr_acc, tr_round = [], []
     print("Training..")
-    # just a progress bar 
+    # just a progress bar
     pbar = tqdm(total=args_.n_rounds)
     current_round = 0
     while current_round <= args_.n_rounds:
@@ -211,7 +213,7 @@ if __name__ == "__main__":
         rows.append([tr_round[i] , tr_acc[i] , k])
 
     # name of csv file
-    filename = "do(k=avg).csv"
+    filename = "do(k=green_1).csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
@@ -223,3 +225,4 @@ if __name__ == "__main__":
 
         # writing the data rows
         csvwriter.writerows(rows)
+

@@ -34,7 +34,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('do(k=4).csv', 'r') as csvfile:
+    with open('do(k=green_1).csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     y0 = []
     z0 = []
 
-    with open('do(k=avg).csv', 'r') as csvfile:
+    with open('do(k=green).csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -83,11 +83,11 @@ if __name__ == "__main__":
     plt.plot(x1, y1, color='r', label='Fjord , k=1')
     #plt.plot(x2, y2, color='b', label='k=2')
     #plt.plot(x3, y3, color='g', label='k=3')
-    #plt.plot(x4, y4, color='c', label='k=4')
+    plt.plot(x4, y4, color='c', label='FedGreen_2label')
     plt.plot(x5, y5, color='k', label='Fjord , k=5')
-    plt.plot(x0, y0, color='g', label='FedAvg')
+    plt.plot(x0, y0, color='g', label='FedGreen_3label')
 
     plt.legend()
     plt.ylabel('train accuracy')
     plt.xlabel('Communication Rounds')
-    plt.savefig('save/plot(k)6.png')
+    plt.savefig('save/plot(k)g3.png')

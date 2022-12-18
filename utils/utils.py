@@ -318,7 +318,8 @@ def get_client(
         logger,
         local_steps,
         tune_locally,
-        k
+        k,
+        green
 ):
     """
 
@@ -375,7 +376,8 @@ def get_client(
             logger=logger,
             local_steps=local_steps,
             tune_locally=tune_locally,
-            k=k
+            k=k,
+            green= green
         )
 
 

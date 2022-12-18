@@ -51,8 +51,10 @@ class Client(object):
             logger,
             local_steps,
             k,
+            green,
             tune_locally=False,
             seed=None
+
     ):
         rng_seed = (seed if (seed is not None and seed >= 0) else int(time.time()))
         self.rng = random.Random(rng_seed)
@@ -61,7 +63,7 @@ class Client(object):
         self.n_learners = len(self.learners_ensemble)
         self.tune_locally = tune_locally
         self.max_cap, self.possible_p_list = functions.select_max_cap(k=k)  #sample  a max_capability of client and a list of possible dropout rates
-
+        self.green = green
         if self.tune_locally:
             self.tuned_learners_ensemble = deepcopy(self.learners_ensemble)
         else:
@@ -164,7 +166,15 @@ class Client(object):
         for learner_id, learner in enumerate(self.tuned_learners_ensemble):
             copy_model(source=self.learners_ensemble[learner_id].model, target=learner.model)
             learner.fit_epochs(self.train_iterator, self.local_steps, weights=self.samples_weights[learner_id], p=self.__p)
-
+    def green_compute(self):
+        if (self.green == 2):
+            self.k= 1
+        elif(self.green == 1):
+            self.k = 1
+        else:
+            self.k = 5
+    def get_k(self):
+        return self.k
 
 class MixtureClient(Client):
     def update_sample_weights(self):
