@@ -170,9 +170,9 @@ class Client(object):
         if (self.green == 2):
             self.k= 1
         elif(self.green == 1):
-            self.k = 1
+            self.k = 2
         else:
-            self.k = 5
+            self.k = 2.46
     def get_k(self):
         return self.k
 

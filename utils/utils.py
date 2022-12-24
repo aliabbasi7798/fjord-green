@@ -344,7 +344,9 @@ def get_client(
             test_iterator=test_iterator,
             logger=logger,
             local_steps=local_steps,
-            tune_locally=tune_locally
+            tune_locally=tune_locally,
+            k = k,
+            green = green
         )
     elif client_type == "AFL":
         return AgnosticFLClient(

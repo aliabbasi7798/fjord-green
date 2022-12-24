@@ -71,7 +71,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = random.randint(0,1)
+            green = random.randint(0, 0)
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
         # max_cap the server send a F_max subnetwork
@@ -98,8 +98,11 @@ def run_experiment(args_):
         root_path=os.path.join(data_dir, "train"),
         logs_root=os.path.join(logs_root, "train")
     )
+    s=0
     for c in clients:
         print(c.k)
+        s = s+c.k
+    print(s)
     print("==> Test Clients initialization..")
     test_clients = init_clients(
         args_,
@@ -213,7 +216,7 @@ if __name__ == "__main__":
         rows.append([tr_round[i] , tr_acc[i] , k])
 
     # name of csv file
-    filename = "do(k=green_1).csv"
+    filename = "do(k=label_avg).csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
