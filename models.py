@@ -104,6 +104,69 @@ class FjordFemnistCNN(nn.Module):
         x = F.linear(x, self._masked(self.fc1.weight, dim=1), self.fc1.bias)
         return x
 
+class FjordCifar10CNN(nn.Module):
+    """
+        Implements a model with two convolutional layers followed by pooling, and a final dense layer with 10 units.
+    """
+
+    def __init__(self, num_classes):
+        super(FjordCifar10CNN, self).__init__()
+        self.p = 1
+        self.conv1 = nn.Conv2d(3, 10, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(10, 20, 5)
+        self.fc1 = nn.Linear(1280, num_classes)
+
+    def _masked(self, param, prev_param=None, dim=0):
+        if dim == 0:
+            _param = param[param.mask]
+        else:
+            _param = param[:, param.mask]
+        if prev_param is not None:
+            _param = _param[:, prev_param.mask]
+        return _param
+
+    def _get_mask(self, layer, dim=0, dropout_rate=1):
+        N = layer.shape[dim]
+        mask = np.zeros(N).astype(bool)
+        mask[:int(N * dropout_rate)] = True
+        return mask
+
+    def compute_masks(self):
+        self.conv1.weight.mask = self._get_mask(self.conv1.weight, dropout_rate=self.p)
+        self.conv1.bias.mask = self._get_mask(self.conv1.bias, dropout_rate=self.p)
+
+        self.conv2.weight.mask = self._get_mask(self.conv2.weight, dropout_rate=self.p)
+        self.conv2.weight.prev_mask = self.conv1.weight.mask
+        self.conv2.bias.mask = self._get_mask(self.conv2.bias, dropout_rate=self.p)
+
+        self.fc1.weight.mask = self._get_mask(self.fc1.weight, dim=1, dropout_rate=self.p)
+        #self.output.weight.mask = self._get_mask(self.output.weight, dim=1, dropout_rate=self.p)
+
+    def forward(self, x, p=1):
+        self.p = p
+        self.compute_masks()
+        x = F.conv2d(
+            x,
+            self._masked(self.conv1.weight),
+            self._masked(self.conv1.bias),
+            1,  # stride
+            2  # padding
+        )
+        x = self.pool(F.relu(x))
+        # Second conv
+        x = F.conv2d(
+            x,
+            self._masked(self.conv2.weight, self.conv1.weight),
+            self._masked(self.conv2.bias),
+            1,  # stride
+            2  # padding
+        )
+        x = self.pool(F.relu(x))
+        #print(x.size(0))
+        x = x.view(x.size(0), -1)
+        x = F.linear(x, self._masked(self.fc1.weight, dim=1), self.fc1.bias)
+        return x
 
 class CIFAR10CNN(nn.Module):
     def __init__(self, num_classes):

@@ -216,7 +216,7 @@ if __name__ == "__main__":
         rows.append([tr_round[i] , tr_acc[i] , k])
 
     # name of csv file
-    filename = "do(k=label_avg).csv"
+    filename = "docifar10(k=5)-r500.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
