@@ -6,7 +6,7 @@ if __name__ == "__main__":
     y1 = []
     z1 = []
 
-    with open('docifar10(k=5)-r100-3label.csv', 'r') as csvfile:
+    with open('docifar10(k=5)-r500.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
         i=0
         for row in plots:
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     y2 = []
     z2 = []
 
-    with open('docifar10(k=5)-r100-1.csv', 'r') as csvfile:
+    with open('docifar10(k=5green)-r500.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('docifar10(k=5)-r100.csv', 'r') as csvfile:
+    with open('docifar10(k=1)-r500.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -90,4 +90,4 @@ if __name__ == "__main__":
     plt.legend()
     plt.ylabel('train accuracy')
     plt.xlabel('Communication Rounds')
-    plt.savefig('save/plot(k)gf-new-1.png')
+    plt.savefig('save/plot(k)gf-new-2.png')

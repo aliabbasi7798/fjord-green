@@ -359,7 +359,8 @@ class FjordAggregator(Aggregator):
         for client in self.clients:
             for learner_id, learner in enumerate(client.learners_ensemble):
                 copy_model(learner.model, self.global_learners_ensemble[learner_id].model)
-
+                print(learner.model.p)
+                print(client.green , "number")
                 if callable(getattr(learner.optimizer, "set_initial_params", None)):
                     learner.optimizer.set_initial_params(
                         self.global_learners_ensemble[learner_id].model.parameters()

@@ -71,7 +71,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = random.randint(0, 0)
+            green = random.randint(0, 2)
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
         # max_cap the server send a F_max subnetwork
@@ -216,7 +216,7 @@ if __name__ == "__main__":
         rows.append([tr_round[i] , tr_acc[i] , k])
 
     # name of csv file
-    filename = "docifar10(k=5)-r500.csv"
+    filename = "docifar10(k=5green)-r500-v1.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:

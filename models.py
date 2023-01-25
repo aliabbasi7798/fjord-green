@@ -116,7 +116,8 @@ class FjordCifar10CNN(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(10, 20, 5)
         self.fc1 = nn.Linear(1280, num_classes)
-
+   # def set_p(self , p):
+    #    self.p = p
     def _masked(self, param, prev_param=None, dim=0):
         if dim == 0:
             _param = param[param.mask]
@@ -143,8 +144,9 @@ class FjordCifar10CNN(nn.Module):
         self.fc1.weight.mask = self._get_mask(self.fc1.weight, dim=1, dropout_rate=self.p)
         #self.output.weight.mask = self._get_mask(self.output.weight, dim=1, dropout_rate=self.p)
 
-    def forward(self, x, p=1):
+    def forward(self, x , p=1):
         self.p = p
+       # print(p)
         self.compute_masks()
         x = F.conv2d(
             x,

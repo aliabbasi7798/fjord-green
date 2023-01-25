@@ -75,7 +75,7 @@ def get_learner(
     elif name == "cifar10":
         criterion = nn.CrossEntropyLoss(reduction="none").to(device)
         metric = accuracy
-        model = FjordCifar10CNN(num_classes=10).to(device)
+        model = FjordCifar10CNN(num_classes=10 ).to(device)
         # model = get_resnet18(n_classes=10).to(device)
         is_binary_classification = False
     elif name == "cifar100":
