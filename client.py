@@ -63,7 +63,7 @@ class Client(object):
         self.n_learners = len(self.learners_ensemble)
         self.tune_locally = tune_locally
         self.max_cap, self.possible_p_list = functions.select_max_cap(k=k)  #sample  a max_capability of client and a list of possible dropout rates
-        print("p list" , self.possible_p_list)
+        #print("p list" , self.possible_p_list)
         self.green = green
         if self.tune_locally:
             self.tuned_learners_ensemble = deepcopy(self.learners_ensemble)
@@ -99,7 +99,7 @@ class Client(object):
         #print ("green"  , self.possible_p_list)
        # self.__p = self.rng.choice(self.possible_p_list)
         self.__p = self.selectgreen_p()
-        print("p" , self.__p)
+        #print("p" , self.__p)
     def get_next_batch(self):
         try:
             batch = next(self.train_loader)

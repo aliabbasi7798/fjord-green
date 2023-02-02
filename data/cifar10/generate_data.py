@@ -17,7 +17,7 @@ from utils import split_dataset_by_labels, pathological_non_iid_split
 ALPHA = .4
 N_CLASSES = 10
 N_COMPONENTS = 3
-SEED = 47654
+SEED = 12345
 RAW_DATA_PATH = "raw_data/"
 PATH = "all_data/"
 

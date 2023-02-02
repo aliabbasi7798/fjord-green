@@ -6,7 +6,7 @@ if __name__ == "__main__":
     y1 = []
     z1 = []
 
-    with open('docifar10(k=5)-r500.csv', 'r') as csvfile:
+    with open('docifar10(p=1)-r500-v1.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
         i=0
         for row in plots:
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     y2 = []
     z2 = []
 
-    with open('docifar10(k=5green)-r500.csv', 'r') as csvfile:
+    with open('docifar10(p=Green)-r500-v1.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('docifar10(k=1)-r500.csv', 'r') as csvfile:
+    with open('docifar10(p=0.2)-r500-v1.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     y5 = []
     z5 = []
 
-    with open('do(k=5).csv', 'r') as csvfile:
+    with open('docifar10(p=0.6)-r500-v1.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -80,14 +80,14 @@ if __name__ == "__main__":
     plt.figure()
     plt.title('Train accuracy')
     # Plot Loss curve
-    plt.plot(x2, y2, color='r', label='3_label FedGreen ')
+    plt.plot(x2, y2, color='r', label='FedGreen')
     #plt.plot(x2, y2, color='b', label='k=2')
-    plt.plot(x1, y1, color='b', label='Fjord , k=5')
-    #plt.plot(x4, y4, color='c', label='FedProx')
-    plt.plot(x4, y4, color='k', label='Fjord , k=1')
+    plt.plot(x1, y1, color='b', label='Fjord , p= 1')
+    plt.plot(x5, y5, color='c', label='Fjord , p = 0.6')
+    plt.plot(x4, y4, color='k', label='Fjord , p = 0.2')
    # plt.plot(x0, y0, color='b', label='FedEM')
 
     plt.legend()
     plt.ylabel('train accuracy')
     plt.xlabel('Communication Rounds')
-    plt.savefig('save/plot(k)gf-new-2.png')
+    plt.savefig('save/plot-500-cifar-v1.png')

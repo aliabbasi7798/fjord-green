@@ -144,7 +144,7 @@ class FjordCifar10CNN(nn.Module):
         self.fc1.weight.mask = self._get_mask(self.fc1.weight, dim=1, dropout_rate=self.p)
         #self.output.weight.mask = self._get_mask(self.output.weight, dim=1, dropout_rate=self.p)
 
-    def forward(self, x , p=1):
+    def forward(self, x, p=1):
         self.p = p
        # print(p)
         self.compute_masks()

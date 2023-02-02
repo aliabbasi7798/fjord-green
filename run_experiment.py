@@ -9,6 +9,7 @@ This file can also be imported as a module and contains the following function:
 
     * run_experiment - runs one experiments given its arguments
 """
+import Carbon
 from utils.utils import *
 from utils.constants import *
 from utils.args import *
@@ -157,16 +158,19 @@ def run_experiment(args_):
             seed=args_.seed,
             k=args.k
         )
-    tr_acc, tr_round = [], []
+    tr_acc, tr_round , times , ps = [], [], [], []
     print("Training..")
     # just a progress bar
     pbar = tqdm(total=args_.n_rounds)
     current_round = 0
     while current_round <= args_.n_rounds:
-        tr_1, tr_2 = aggregator.mix()
+        tr_1, tr_2 , time , p = aggregator.mix()
         if(len(tr_1) > 0):
             tr_acc.append(tr_1[0])
             tr_round.append(tr_2[0])
+
+        print(Carbon.carbonEmission(10 , 1 , 1 , 0.5 , 0.5, 10, time , p))
+
         #print(1)
         if aggregator.c_round != current_round:
             pbar.update(1)
@@ -216,7 +220,7 @@ if __name__ == "__main__":
         rows.append([tr_round[i] , tr_acc[i] , k])
 
     # name of csv file
-    filename = "docifar10(k=5green)-r500-v1.csv"
+    filename = "domnist_carbon_test.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:

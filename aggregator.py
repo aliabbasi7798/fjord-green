@@ -319,6 +319,7 @@ class CentralizedAggregator(Aggregator):
             tr_acc, tr_round = self.write_logs()
         return tr_acc, tr_round
     def update_clients(self):
+       # print("hello")
         for client in self.clients:
             for learner_id, learner in enumerate(client.learners_ensemble):
                 copy_model(learner.model, self.global_learners_ensemble[learner_id].model)
@@ -335,14 +336,23 @@ class FjordAggregator(Aggregator):
 
     """
 
+
+   # print(end - start)
+
     # for each round apply this
     def mix(self):
         tr_acc, tr_round = [], []
         self.sample_clients()
-
+        #print(self.sample_clients)
+        timeArr =[]
+        pArr=[]
         for client in self.sampled_clients:
+            pArr.append(client.selectgreen_p())
+            start = time.time()
             client.step()
-
+            end = time.time()
+            timeArr.append(end-start)
+        #print(ic)
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
             fjord_average_learners(learners, learner, weights=self.clients_weights)
@@ -354,13 +364,15 @@ class FjordAggregator(Aggregator):
 
         if self.c_round % self.log_freq == 0:
             tr_acc, tr_round = self.write_logs()
-        return tr_acc, tr_round
+        return tr_acc, tr_round , timeArr , pArr
     def update_clients(self):
+        print("hello")
         for client in self.clients:
+            #print(client.selectgreen_p())
             for learner_id, learner in enumerate(client.learners_ensemble):
                 copy_model(learner.model, self.global_learners_ensemble[learner_id].model)
-                print(learner.model.p)
-                print(client.green , "number")
+               # print(learner.model.p)
+               # print(client.green , "number")
                 if callable(getattr(learner.optimizer, "set_initial_params", None)):
                     learner.optimizer.set_initial_params(
                         self.global_learners_ensemble[learner_id].model.parameters()

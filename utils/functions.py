@@ -2,7 +2,7 @@ import numpy
 
 def select_max_cap(k=5):
     list_k = [i / k for i in range(1, k + 1)]
-    print(list_k)
+    #print(list_k)
     max_cap = numpy.random.choice(list_k)
     possible_p_list = list_k[:list_k.index(max_cap)+1]
 
