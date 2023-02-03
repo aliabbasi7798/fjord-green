@@ -1,21 +1,24 @@
 
-def carbonEmission(modelSize , uploadRate , downloadRate  , eRouter , eClient, numberClient, time , pArr):
+def carbonEmission(modelSize , uploadRate , downloadRate  , eRouter , eClient, numberClient, time , pArr , energyC):
     carbonfactor = 1
+    comuEng , compEng = 0 , 0
     for i in range(numberClient):
-        return carbonfactor*energy(modelSize*pArr[i] , uploadRate, downloadRate , eRouter , eClient, numberClient, time , 0.9872 * pArr[i])
+        comutemp , comptemp = energy(modelSize * pArr[i], uploadRate, downloadRate, eRouter,
+                                     eClient, time[i], energyC[i])
+        #print(comutemp , comptemp)
+        comuEng += comutemp
+        compEng += comptemp
+    return carbonfactor*comuEng , carbonfactor*compEng
+def energy(modelSize , uploadRate , downloadRate  , eRouter , eClient, time , energyrate):
+    return communicationEnergy(modelSize , uploadRate, downloadRate  , eRouter , eClient),\
+           computationEnergy(time , energyrate)
 
-def energy(modelSize , uploadRate , downloadRate  , eRouter , eClient, numberClient, time , energyrate):
-    return communicationEnergy(modelSize , uploadRate, downloadRate  , eRouter , eClient, numberClient)  + computationEnergy(time , energyrate , numberClient)
+def communicationEnergy(modelSize , uploadRate , downloadRate  , eRouter , eClient):
 
-def communicationEnergy(modelSize , uploadRate , downloadRate  , eRouter , eClient, numberClient):
-    totalEnergy = 0
-    for i in range(numberClient):
-        totalEnergy = modelSize * (1 /uploadRate + 1/downloadRate)*(eRouter + eClient)
+    totalEnergy = modelSize * (1 /uploadRate + 1/downloadRate)*(eRouter + eClient)
     return totalEnergy
 
-def computationEnergy(time , energyrate , numberofclients):
-    totalEnergy = 0
-    for i in range(numberofclients):
-       totalEnergy += time[i] * energyrate
+def computationEnergy(time , energyrate):
+    totalEnergy = time * energyrate
 
     return totalEnergy

@@ -72,7 +72,8 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = random.randint(0, 2)
+            green = 1,
+            energyClient= random.uniform(0.1 , 1),
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
         # max_cap the server send a F_max subnetwork
@@ -101,9 +102,10 @@ def run_experiment(args_):
     )
     s=0
     for c in clients:
-        print(c.k)
-        s = s+c.k
-    print(s)
+        print(c.selectgreen_p())
+        print(c.energyClient)
+        s = s+c.selectgreen_p()
+    print(s/len(clients))
     print("==> Test Clients initialization..")
     test_clients = init_clients(
         args_,
@@ -163,19 +165,34 @@ def run_experiment(args_):
     # just a progress bar
     pbar = tqdm(total=args_.n_rounds)
     current_round = 0
+    totalcommunicationEnergy , totalcomputationEnergy , totalEnergy = 0 , 0 , 0
+    time1 , time6 , time2 = 0,0, 0
     while current_round <= args_.n_rounds:
-        tr_1, tr_2 , time , p = aggregator.mix()
+        tr_1, tr_2 , time , p , energyC = aggregator.mix()
         if(len(tr_1) > 0):
             tr_acc.append(tr_1[0])
             tr_round.append(tr_2[0])
-
-        print(Carbon.carbonEmission(10 , 1 , 1 , 0.5 , 0.5, 10, time , p))
+        print(energyC)
+        comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC)
+        totalcommunicationEnergy += comuEng
+        totalcomputationEnergy += compEng
+        for ti in range(10):
+            if (p[ti] == 1):
+                time1 += time[ti]
+            elif(p[ti] == 0.6):
+                time6 += time[ti]
+            else:
+                time2 += time[ti]
+        print(comuEng , compEng)
 
         #print(1)
         if aggregator.c_round != current_round:
             pbar.update(1)
             current_round = aggregator.c_round
         #print(2)
+    totalEnergy = totalcomputationEnergy + totalcommunicationEnergy
+    print(totalEnergy , totalcommunicationEnergy , totalcomputationEnergy)
+    print(time1 , time6 , time2)
     if "save_path" in args_:
         save_root = os.path.join(args_.save_path)
         #print(3)
@@ -220,7 +237,7 @@ if __name__ == "__main__":
         rows.append([tr_round[i] , tr_acc[i] , k])
 
     # name of csv file
-    filename = "domnist_carbon_test.csv"
+    filename = "domnist(p==1)_carbon_test_r50_v1.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:

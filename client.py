@@ -52,6 +52,7 @@ class Client(object):
             local_steps,
             k,
             green,
+            energyClient,
             tune_locally=False,
             seed=None
 
@@ -65,6 +66,7 @@ class Client(object):
         self.max_cap, self.possible_p_list = functions.select_max_cap(k=k)  #sample  a max_capability of client and a list of possible dropout rates
         #print("p list" , self.possible_p_list)
         self.green = green
+        self.energyClient = energyClient
         if self.tune_locally:
             self.tuned_learners_ensemble = deepcopy(self.learners_ensemble)
         else:
@@ -89,12 +91,15 @@ class Client(object):
         self.logger = logger
         self.__p = max(self.possible_p_list)
     def selectgreen_p(self):
-        if(self. green == 2):
-            return 1
-        elif(self.green == 1):
-            return 0.6
+        if(self. green == 0):
+            if(self.energyClient > 0.7 and self.energyClient <= 1 ):
+                return 1
+            elif(self.energyClient > 0.4 and self.energyClient <= 0.7 ):
+                return 0.6
+            else:
+                return 0.2
         else:
-            return 0.2
+            return self.green
     def select_p(self):
         #print ("green"  , self.possible_p_list)
        # self.__p = self.rng.choice(self.possible_p_list)
@@ -108,6 +113,7 @@ class Client(object):
             batch = next(self.train_loader)
 
         return batch
+
 
     def step(self, single_batch_flag=False, *args, **kwargs):
         """

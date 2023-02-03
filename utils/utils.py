@@ -319,7 +319,8 @@ def get_client(
         local_steps,
         tune_locally,
         k,
-        green
+        green,
+        energyClient
 ):
     """
 
@@ -346,7 +347,8 @@ def get_client(
             local_steps=local_steps,
             tune_locally=tune_locally,
             k = k,
-            green = green
+            green = green,
+            energyClient = energyClient
         )
     elif client_type == "AFL":
         return AgnosticFLClient(
@@ -379,7 +381,8 @@ def get_client(
             local_steps=local_steps,
             tune_locally=tune_locally,
             k=k,
-            green= green
+            green= green,
+            energyClient = energyClient
         )
 
 
