@@ -347,9 +347,11 @@ class FjordAggregator(Aggregator):
         timeArr =[]
         pArr=[]
         energyC = []
+        carbonIntensity =[]
         for client in self.sampled_clients:
             pArr.append(client.selectgreen_p())
             energyC.append(client.energyClient)
+            carbonIntensity.append(client.carbonIntensity)
             start = time.time()
             client.step()
             end = time.time()
@@ -366,7 +368,7 @@ class FjordAggregator(Aggregator):
 
         if self.c_round % self.log_freq == 0:
             tr_acc, tr_round = self.write_logs()
-        return tr_acc, tr_round , timeArr , pArr , energyC
+        return tr_acc, tr_round , timeArr , pArr , energyC , carbonIntensity
     def update_clients(self):
         print("hello")
         for client in self.clients:

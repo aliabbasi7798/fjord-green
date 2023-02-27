@@ -1,14 +1,14 @@
 
-def carbonEmission(modelSize , uploadRate , downloadRate  , eRouter , eClient, numberClient, time , pArr , energyC):
-    carbonfactor = 1
-    comuEng , compEng = 0 , 0
+def carbonEmission(modelSize , uploadRate , downloadRate  , eRouter , eClient, numberClient, time , pArr , energyC , carbonIntensity):
+    carbonfactor = carbonIntensity
+    comuCarbon , compCarbon = 0 , 0
     for i in range(numberClient):
         comutemp , comptemp = energy(modelSize * pArr[i], uploadRate, downloadRate, eRouter,
                                      eClient, time[i], energyC[i])
         #print(comutemp , comptemp)
-        comuEng += comutemp
-        compEng += comptemp
-    return carbonfactor*comuEng , carbonfactor*compEng
+        comuCarbon += comutemp * carbonfactor[i]
+        compCarbon += comptemp * carbonfactor[i]
+    return comuCarbon ,compCarbon
 def energy(modelSize , uploadRate , downloadRate  , eRouter , eClient, time , energyrate):
     return communicationEnergy(modelSize , uploadRate, downloadRate  , eRouter , eClient),\
            computationEnergy(time , energyrate)

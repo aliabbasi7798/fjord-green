@@ -72,8 +72,9 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = 1,
+            green = -1,
             energyClient= random.uniform(0.1 , 1),
+            carbonIntensity = random.randint(11 , 1124),
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
         # max_cap the server send a F_max subnetwork
@@ -168,15 +169,17 @@ def run_experiment(args_):
     totalcommunicationEnergy , totalcomputationEnergy , totalEnergy = 0 , 0 , 0
     time1 , time6 , time2 = 0,0, 0
     while current_round <= args_.n_rounds:
-        tr_1, tr_2 , time , p , energyC = aggregator.mix()
+        tr_1, tr_2 , time , p , energyC , carbon = aggregator.mix()
         if(len(tr_1) > 0):
             tr_acc.append(tr_1[0])
             tr_round.append(tr_2[0])
         print(energyC)
-        comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC)
+        print(carbon)
+        print(p)
+        comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC , carbon)
         totalcommunicationEnergy += comuEng
         totalcomputationEnergy += compEng
-        for ti in range(10):
+        for ti in range(8):
             if (p[ti] == 1):
                 time1 += time[ti]
             elif(p[ti] == 0.6):
@@ -237,7 +240,7 @@ if __name__ == "__main__":
         rows.append([tr_round[i] , tr_acc[i] , k])
 
     # name of csv file
-    filename = "domnist(p==1)_carbon_test_r50_v1.csv"
+    filename = "docifar(p==ec)_carbon_test_r500_v1_f.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:

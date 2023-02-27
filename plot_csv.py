@@ -6,7 +6,7 @@ if __name__ == "__main__":
     y1 = []
     z1 = []
 
-    with open('docifar10(p=1)-r500-v1.csv', 'r') as csvfile:
+    with open('domnist(p==1)_carbon_test_r50_v1.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
         i=0
         for row in plots:
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     y2 = []
     z2 = []
 
-    with open('docifar10(p=Green)-r500-v1.csv', 'r') as csvfile:
+    with open('domnist(p==green)_carbon_test_r50_v1.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('docifar10(p=0.2)-r500-v1.csv', 'r') as csvfile:
+    with open('domnist(p==0.2)_carbon_test_r50_v1.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     y5 = []
     z5 = []
 
-    with open('docifar10(p=0.6)-r500-v1.csv', 'r') as csvfile:
+    with open('domnist(p==0.6)_carbon_test_r50_v1.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -90,4 +90,4 @@ if __name__ == "__main__":
     plt.legend()
     plt.ylabel('train accuracy')
     plt.xlabel('Communication Rounds')
-    plt.savefig('save/plot-500-cifar-v1.png')
+    plt.savefig('save/plot-r50-mnist.png')

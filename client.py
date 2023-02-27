@@ -53,6 +53,7 @@ class Client(object):
             k,
             green,
             energyClient,
+            carbonIntensity,
             tune_locally=False,
             seed=None
 
@@ -67,6 +68,7 @@ class Client(object):
         #print("p list" , self.possible_p_list)
         self.green = green
         self.energyClient = energyClient
+        self.carbonIntensity = carbonIntensity
         if self.tune_locally:
             self.tuned_learners_ensemble = deepcopy(self.learners_ensemble)
         else:
@@ -91,13 +93,37 @@ class Client(object):
         self.logger = logger
         self.__p = max(self.possible_p_list)
     def selectgreen_p(self):
+        temp = self.carbonIntensity * self.energyClient
         if(self. green == 0):
             if(self.energyClient > 0.7 and self.energyClient <= 1 ):
-                return 1
+                return 0.2
             elif(self.energyClient > 0.4 and self.energyClient <= 0.7 ):
                 return 0.6
             else:
+                return 1
+        elif(self.green == -1):
+            if (self.carbonIntensity > 753 and self.carbonIntensity <= 1124):
                 return 0.2
+            elif (self.carbonIntensity > 384 and self.carbonIntensity <= 753):
+                return 0.6
+            else:
+                return 1
+        elif (self.green == -2):
+            if (self.carbonIntensity > 753 and self.carbonIntensity <= 1124):
+                if (self.energyClient > 0.55):
+                    return 0.2
+                else:
+                    return 0.4
+            elif (self.carbonIntensity <= 384):
+                if (self.energyClient > 0.55):
+                    return 0.8
+                else:
+                    return 1
+            else:
+                if (self.energyClient > 0.55):
+                    return 0.5
+                else:
+                    return 0.7
         else:
             return self.green
     def select_p(self):
