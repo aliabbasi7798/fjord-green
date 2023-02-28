@@ -103,9 +103,14 @@ class Client(object):
                 return 1
         elif(self.green == -1):
             if (self.carbonIntensity > 753 and self.carbonIntensity <= 1124):
-                return 0.2
+                return 0.4
             elif (self.carbonIntensity > 384 and self.carbonIntensity <= 753):
                 return 0.6
+            else:
+                return 0.8
+        elif (self.green == -3):
+            if (self.carbonIntensity > 567 and self.carbonIntensity <= 1124):
+                return 0.2
             else:
                 return 1
         elif (self.green == -2):

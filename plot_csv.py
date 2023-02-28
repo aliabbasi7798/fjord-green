@@ -6,7 +6,7 @@ if __name__ == "__main__":
     y1 = []
     z1 = []
 
-    with open('domnist(p==1)_carbon_test_r50_v1.csv', 'r') as csvfile:
+    with open('docifar(p==ec)_carbon_test_niid__r500_v1_f_0.2.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
         i=0
         for row in plots:
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     y2 = []
     z2 = []
 
-    with open('domnist(p==green)_carbon_test_r50_v1.csv', 'r') as csvfile:
+    with open('docifar(p==ec)_carbon_test_niid__r500_v1_f_0.4.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('domnist(p==0.2)_carbon_test_r50_v1.csv', 'r') as csvfile:
+    with open('docifar(p==ec)_carbon_test_niid__r500_v1_f_2cluster.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     y5 = []
     z5 = []
 
-    with open('domnist(p==0.6)_carbon_test_r50_v1.csv', 'r') as csvfile:
+    with open('docifar(p==0.6)_carbon_test_niid__r500_v1_f.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     y0 = []
     z0 = []
 
-    with open('do(k=fedProx).csv', 'r') as csvfile:
+    with open('docifar(p==0.6)_carbon_test_niid__r500_v1_f.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -80,14 +80,14 @@ if __name__ == "__main__":
     plt.figure()
     plt.title('Train accuracy')
     # Plot Loss curve
-    plt.plot(x2, y2, color='r', label='FedGreen')
+    plt.plot(x2, y2, color='r', label='FedGreen(0.4, 0.6, 0.8) ')
     #plt.plot(x2, y2, color='b', label='k=2')
-    plt.plot(x1, y1, color='b', label='Fjord , p= 1')
+    plt.plot(x1, y1, color='b', label='FedGreen(0.2, 0.6, 1)')
     plt.plot(x5, y5, color='c', label='Fjord , p = 0.6')
-    plt.plot(x4, y4, color='k', label='Fjord , p = 0.2')
+    plt.plot(x4, y4, color='k', label='FedGreen(0.2 , 1)')
    # plt.plot(x0, y0, color='b', label='FedEM')
 
     plt.legend()
     plt.ylabel('train accuracy')
     plt.xlabel('Communication Rounds')
-    plt.savefig('save/plot-r50-mnist.png')
+    plt.savefig('save/plot-r50-emnist-niid.png')

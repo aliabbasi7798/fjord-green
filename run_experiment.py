@@ -240,7 +240,7 @@ if __name__ == "__main__":
         rows.append([tr_round[i] , tr_acc[i] , k])
 
     # name of csv file
-    filename = "docifar(p==ec)_carbon_test_r500_v1_f.csv"
+    filename = "docifar(p==ec)_carbon_test_niid__r500_v1_f_0.4.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
