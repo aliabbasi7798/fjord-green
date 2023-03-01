@@ -149,6 +149,8 @@ class Aggregator(ABC):
         tr_acc=[]
         tr_loss=[]
         tr_round=[]
+        tst_acc =[]
+        tst_round = []
         for global_logger, clients in [
             (self.global_train_logger, self.clients),
             (self.global_test_logger, self.test_clients)
@@ -199,6 +201,8 @@ class Aggregator(ABC):
                 print("+" * 50)
             tr_acc.append(global_train_acc)
             tr_round.append(self.c_round)
+            tst_acc.append(global_test_acc)
+            tst_round.append(self.c_round)
             global_logger.add_scalar("Train/Loss", global_train_loss, self.c_round)
             global_logger.add_scalar("Train/Metric", global_train_acc, self.c_round)
             global_logger.add_scalar("Test/Loss", global_test_loss, self.c_round)
@@ -206,7 +210,7 @@ class Aggregator(ABC):
 
         if self.verbose > 0:
             print("#" * 80)
-        return tr_acc, tr_round
+        return tr_acc, tr_round, tst_acc , tst_round
     def save_state(self, dir_path):
         """
         save the state of the aggregator, i.e., the state dictionary of each `learner` in `global_learners_ensemble`
@@ -341,7 +345,7 @@ class FjordAggregator(Aggregator):
 
     # for each round apply this
     def mix(self):
-        tr_acc, tr_round = [], []
+        tr_acc, tr_round, test_acc, test_round = [], [], [], []
         self.sample_clients()
         #print(self.sample_clients)
         timeArr =[]
@@ -367,8 +371,8 @@ class FjordAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            tr_acc, tr_round = self.write_logs()
-        return tr_acc, tr_round , timeArr , pArr , energyC , carbonIntensity
+            tr_acc, tr_round , test_acc, test_round = self.write_logs()
+        return tr_acc, tr_round ,test_acc, test_round, timeArr , pArr , energyC , carbonIntensity
     def update_clients(self):
         print("hello")
         for client in self.clients:

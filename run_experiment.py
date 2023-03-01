@@ -161,7 +161,7 @@ def run_experiment(args_):
             seed=args_.seed,
             k=args.k
         )
-    tr_acc, tr_round , times , ps = [], [], [], []
+    tr_acc, tr_round ,test_acc, test_round, times , ps = [], [], [], [], [], []
     print("Training..")
     # just a progress bar
     pbar = tqdm(total=args_.n_rounds)
@@ -169,10 +169,12 @@ def run_experiment(args_):
     totalcommunicationEnergy , totalcomputationEnergy , totalEnergy = 0 , 0 , 0
     time1 , time6 , time2 = 0,0, 0
     while current_round <= args_.n_rounds:
-        tr_1, tr_2 , time , p , energyC , carbon = aggregator.mix()
-        if(len(tr_1) > 0):
+        tr_1, tr_2 ,testa, testr, time , p , energyC , carbon = aggregator.mix()
+        if(len(testa) > 0):
             tr_acc.append(tr_1[0])
             tr_round.append(tr_2[0])
+            test_acc.append(testa[0])
+            test_round.append(testr[0])
         print(energyC)
         print(carbon)
         print(p)
@@ -201,18 +203,19 @@ def run_experiment(args_):
         #print(3)
         os.makedirs(save_root, exist_ok=True)
         aggregator.save_state(save_root)
-    return tr_acc, tr_round
+    return tr_acc, tr_round, test_acc, test_round
 
 if __name__ == "__main__":
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
     args = parse_args()
-    tr_acc, tr_round = run_experiment(args)
+    tr_acc, tr_round , test_acc , test_round = run_experiment(args)
 
     print(tr_acc)
     print(tr_round)
-
+    print(test_acc)
+    print(test_round)
     import matplotlib
     import matplotlib.pyplot as plt
 
@@ -236,8 +239,8 @@ if __name__ == "__main__":
     fields = ['Train Accuracy', 'Rounds' , 'k']
     rows = []
     # data rows of csv file
-    for i in range(len(tr_round)):
-        rows.append([tr_round[i] , tr_acc[i] , k])
+    for i in range(len(test_round)):
+        rows.append([test_round[i] , test_acc[i] , k])
 
     # name of csv file
     filename = "docifar(p==ec)_carbon_test_niid__r500_v1_f_0.4.csv"
