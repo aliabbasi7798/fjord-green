@@ -72,7 +72,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = -1,
+            green = 0,
             energyClient= random.uniform(0.1 , 1),
             carbonIntensity = random.randint(11 , 1124),
         )
@@ -168,9 +168,12 @@ def run_experiment(args_):
     current_round = 0
     totalcommunicationEnergy , totalcomputationEnergy , totalEnergy = 0 , 0 , 0
     time1 , time6 , time2 = 0,0, 0
+    acc = 0
     while current_round <= args_.n_rounds:
         tr_1, tr_2 ,testa, testr, time , p , energyC , carbon = aggregator.mix()
+
         if(len(testa) > 0):
+            acc = testa[0]
             tr_acc.append(tr_1[0])
             tr_round.append(tr_2[0])
             test_acc.append(testa[0])
@@ -178,17 +181,19 @@ def run_experiment(args_):
         print(energyC)
         print(carbon)
         print(p)
-        comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC , carbon)
-        totalcommunicationEnergy += comuEng
-        totalcomputationEnergy += compEng
-        for ti in range(8):
+        print(acc)
+        if(acc < 0.6):
+         comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC , carbon)
+         totalcommunicationEnergy += comuEng
+         totalcomputationEnergy += compEng
+         for ti in range(8):
             if (p[ti] == 1):
                 time1 += time[ti]
             elif(p[ti] == 0.6):
                 time6 += time[ti]
             else:
                 time2 += time[ti]
-        print(comuEng , compEng)
+         print(comuEng , compEng)
 
         #print(1)
         if aggregator.c_round != current_round:
@@ -236,14 +241,14 @@ if __name__ == "__main__":
     import csv
     k = 0
     # field names
-    fields = ['Train Accuracy', 'Rounds' , 'k']
+    fields = ['Test Accuracy', 'Rounds' , 'k']
     rows = []
     # data rows of csv file
     for i in range(len(test_round)):
         rows.append([test_round[i] , test_acc[i] , k])
 
     # name of csv file
-    filename = "docifar(p==ec)_carbon_test_niid__r500_v1_f_0.4.csv"
+    filename = "domnist(p==c(0.2,06,1))_test_niid__r100_60.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
