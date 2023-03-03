@@ -381,6 +381,10 @@ class FjordAggregator(Aggregator):
                 copy_model(learner.model, self.global_learners_ensemble[learner_id].model)
                # print(learner.model.p)
                # print(client.green , "number")
+              #  total_params = sum(
+               #     param.numel() for param in learner.model.parameters()
+               # )
+              #  print('Total number of parameters:', total_params)
                 if callable(getattr(learner.optimizer, "set_initial_params", None)):
                     learner.optimizer.set_initial_params(
                         self.global_learners_ensemble[learner_id].model.parameters()
