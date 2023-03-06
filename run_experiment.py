@@ -72,8 +72,8 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = 1,
-            energyClient= random.uniform(0.1 , 1),
+            green = -1,
+            energyClient= 0.5,
             carbonIntensity = random.randint(11 , 1124),
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
@@ -104,7 +104,7 @@ def run_experiment(args_):
     s=0
     for c in clients:
         print(c.selectgreen_p())
-        print(c.energyClient)
+        #print(c.energyClient)
         s = s+c.selectgreen_p()
     print(s/len(clients))
     print("==> Test Clients initialization..")
@@ -181,12 +181,13 @@ def run_experiment(args_):
         print(energyC)
         print(carbon)
         print(p)
+        print(time)
         print(acc)
-        if(acc < 0.6):
+        if(acc < 0.65):
          comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC , carbon)
          totalcommunicationEnergy += comuEng
          totalcomputationEnergy += compEng
-         for ti in range(8):
+         for ti in range(10):
             if (p[ti] == 1):
                 time1 += time[ti]
             elif(p[ti] == 0.6):
@@ -248,7 +249,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , k])
 
     # name of csv file
-    filename = "domnist(p==c(0.1 , 0.2 , 0.3))_test_niid__r100_60.csv"
+    filename = "domnist(p==0.2,0.6,1)_test_niid__r100_65_fixenergy.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
