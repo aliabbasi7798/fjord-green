@@ -257,7 +257,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , k])
 
     # name of csv file
-    filename = "domnist(p==0.6)_test_niid__r100_65_fixenergy.csv"
+    filename = "domnist(p==0.2)_test_niid__r100_65_fixenergy.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
