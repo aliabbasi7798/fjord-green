@@ -72,7 +72,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = 1,
+            green = -1,
             energyClient= 0.5,
             carbonIntensity = random.choice([0.1 ,10 ,1000]),
         )
@@ -257,7 +257,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , k])
 
     # name of csv file
-    filename = "domnist(p==0.2)_test_niid__r100_65_fixenergy.csv"
+    filename = "domnist(p==0.2 , 0,6 , 1)_test_niid__r100_65_fixenergy.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
