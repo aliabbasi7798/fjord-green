@@ -3,6 +3,7 @@ Download CIFAR-10 dataset, and splits it among clients
 """
 import os
 import argparse
+import pathlib
 import pickle
 
 from torchvision.datasets import CIFAR10
@@ -20,7 +21,7 @@ import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
 from torch.utils.data import Dataset
 from torchvision import transforms, utils
-
+import pandas as pd
 
 ALPHA = .4
 N_CLASSES = 10
@@ -182,38 +183,40 @@ if __name__ == "__main__":
 
 
 class NIHDataset(Dataset):
-    def __init__(self, root, transform, ext='jpg'):
-        """ Instantiate an object of the FlowerDataset
-        Args:
-          root (str): The root directory includes images, where each class of images is
-            inside a separate folder.
-          transformation (callable): A image augmentation function to be applied to an image.
-            default is None, indicating the there will be no transformation applied
-            an image.
-        """
+    def __init__(self, root, transform, ext='.jpg'):
+        self.root = root
+        self.transform = transform
         self.paths = []
         self.labels = []
+        self.paths = glob.glob(f'{root}/**/*.jpg', recursive=True)
+        print(self.paths)
 
-        # In this assignment label encoder was given.
-        # However, if we wanted to make it ourself,
-        self.label_encoder = {cat: index for index, cat in \
-                              enumerate(cat for cat in os.listdir(root) if \
-                                        os.path.isdir(os.path.join(root, cat)) and \
-                                        not cat.startswith('.'))}
-        # end of label encoder
-
+        self.train_data = pd.read_csv("nih_Xray/Data_Entry_2017.csv")
+        self.train_id = self.train_data.id
+        self.train_label = self.train_data.label
+        print(self.train_id[0], self.train_label[0])
         self.label_encoder = {"daisy": 0, "dandelion": 1, "roses": 2,
                               "sunflowers": 3, "tulips": 4}
 
-        self.transform = transform
-        self.label_decoder = {index: cat for cat, index in self.label_encoder.items()}
 
-        for cat in self.label_encoder.keys():
-            category_path = glob.glob(os.path.join(root, cat, f'*.{ext}'))
-            self.paths += category_path
-            self.labels += [self.label_encoder[cat]] * len(category_path)
+        for i in range(len(self.paths)):
+            str = self.paths[i]
+            path = pathlib.PurePath(str)  # this will contain array of path
+            image_path = os.path.split(path)
 
-        # End of TODO
+            # print tail part of the path
+
+
+            for j in range(len(self.train_id)):
+                    str = self.train_id[j]
+                    path = pathlib.PurePath(str)  # this will contain array of path
+                    csv_path = os.path.split(path)
+                    if image_path[1] == csv_path[1]:
+                        self.labels.append(self.train_label[j])
+            else:
+                self.labels.append(self.paths[i])
+
+        print(self.labels)
         assert len(self.paths) == len(self.labels), "Number of image paths and labels should be equal"
 
     def __len__(self):
