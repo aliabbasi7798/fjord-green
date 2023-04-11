@@ -18,7 +18,7 @@ class LinearLayer(nn.Module):
 
 class MedMnistBase(nn.Module):
     def __init__(self, in_channels, num_classes):
-        super(Net, self).__init__()
+        super(MedMnistBase, self).__init__()
 
         self.layer1 = nn.Sequential(
             nn.Conv2d(in_channels, 16, kernel_size=3),

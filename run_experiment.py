@@ -169,50 +169,64 @@ def run_experiment(args_):
     totalcommunicationEnergy , totalcomputationEnergy , totalEnergy = 0 , 0 , 0
     time1 , time6 , time2 , num1 , num2 , num6= 0,0, 0, 0 , 0 , 0
     acc = 0
+    modeProject = 0
     while current_round <= args_.n_rounds:
-        print(current_round)
-        tr_1, tr_2 ,testa, testr, time , p , energyC , carbon = aggregator.mix()
+        if ( modeProject == 0):
+            tr_1, tr_2 ,testa, testr = aggregator.mix()
+            if (len(testa) > 0):
+                acc = testa[0]
+                tr_acc.append(tr_1[0])
+                tr_round.append(tr_2[0])
+                test_acc.append(testa[0])
+                test_round.append(testr[0])
+            if aggregator.c_round != current_round:
+                pbar.update(1)
+                current_round = aggregator.c_round
 
-        if(len(testa) > 0):
-            acc = testa[0]
-            tr_acc.append(tr_1[0])
-            tr_round.append(tr_2[0])
-            test_acc.append(testa[0])
-            test_round.append(testr[0])
-        print(energyC)
-        print(carbon)
-        print(p)
-        print(time)
-        print(acc)
-        if(acc < 0.6):
-         comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC , carbon)
-         totalcommunicationEnergy += comuEng
-         totalcomputationEnergy += compEng
+        if (modeProject == 1):
+            print(current_round)
+            tr_1, tr_2, testa, testr, time, p, energyC, carbon = aggregator.mix()
+            if(len(testa) > 0):
+                acc = testa[0]
+                tr_acc.append(tr_1[0])
+                tr_round.append(tr_2[0])
+                test_acc.append(testa[0])
+                test_round.append(testr[0])
+            print(energyC)
+            print(carbon)
+            print(p)
+            print(time)
+            print(acc)
+            if(acc < 0.6):
+                comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC , carbon)
+                totalcommunicationEnergy += comuEng
+                totalcomputationEnergy += compEng
 
-         for ti in range(10):
-            if (p[ti] == 1):
-                time1 += time[ti]
-                num1 = num1 +1
-            elif(p[ti] == 0.6):
-                time6 += time[ti]
-                num6 = num6+1
-            else:
-                time2 += time[ti]
-                num2 = num2 +1
+                for ti in range(10):
+                    if (p[ti] == 1):
+                        time1 += time[ti]
+                        num1 = num1 +1
+                    elif(p[ti] == 0.6):
+                        time6 += time[ti]
+                        num6 = num6+1
+                    else:
+                        time2 += time[ti]
+                        num2 = num2 +1
          #print(time1/num1 , time2/num2 , time6/num6)
-         print(comuEng, compEng)
-        else:
-             break
+                print(comuEng, compEng)
+            else:
+                break
 
 
         #print(1)
-        if aggregator.c_round != current_round:
-            pbar.update(1)
-            current_round = aggregator.c_round
+            if aggregator.c_round != current_round:
+                pbar.update(1)
+                current_round = aggregator.c_round
         #print(2)
-    totalEnergy = totalcomputationEnergy + totalcommunicationEnergy
-    print(totalEnergy , totalcommunicationEnergy , totalcomputationEnergy)
-    print(time1/num1 , time6/num6 , time2/num2 , num1 , num6 , num2)
+    if (modeProject == 1) :
+        totalEnergy = totalcomputationEnergy + totalcommunicationEnergy
+        print(totalEnergy , totalcommunicationEnergy , totalcomputationEnergy)
+        print(time1/num1 , time6/num6 , time2/num2 , num1 , num6 , num2)
     if "save_path" in args_:
         save_root = os.path.join(args_.save_path)
         #print(3)

@@ -194,7 +194,7 @@ class SubMEDMNIST(Dataset):
 
     def __getitem__(self, index):
         img, target = self.data[index], int(self.targets[index])
-        print(type(img))
+        #print(type(img))
         img = Image.fromarray(img.numpy(), 'RGB')
 
         if self.transform is not None:
@@ -438,7 +438,7 @@ def get_medmnist():
     medmnist_test = \
         DataClass(split='test', download=download)
 
-    print(type(medmnist_train))
+    #print(type(medmnist_train))
     target_train = []
     data_train = []
     target_test = []
@@ -463,8 +463,8 @@ def get_medmnist():
             torch.tensor(target_train),
             torch.tensor(target_test)
         ])
-    print(type(medmnist_train))
-    print()
+    #print(type(medmnist_train))
+    #print()
     return medmnist_data, medmnist_targets
 
 def get_cifar10():

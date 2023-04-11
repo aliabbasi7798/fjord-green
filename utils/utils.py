@@ -234,7 +234,7 @@ def get_loaders(type_, root_path, batch_size, is_validation):
         inputs, targets = None, None
 
     train_iterators, val_iterators, test_iterators = [], [], []
-    print(inputs.size())
+    #print(inputs.size())
     for task_id, task_dir in enumerate(tqdm(os.listdir(root_path))):
         task_data_path = os.path.join(root_path, task_dir)
 

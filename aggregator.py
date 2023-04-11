@@ -291,8 +291,8 @@ class NoCommunicationAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            tr_acc, tr_round  = self.write_logs()
-        return tr_acc, tr_round
+            tr_acc, tr_round , test_acc, test_round  = self.write_logs()
+        return tr_acc, tr_round , test_acc, test_round
 
     def update_clients(self):
         pass
@@ -318,10 +318,10 @@ class CentralizedAggregator(Aggregator):
         self.update_clients()
 
         self.c_round += 1
-        tr_acc, tr_round = [] , []
+        tr_acc, tr_round , test_acc, test_round = [] , [] , [] , []
         if self.c_round % self.log_freq == 0:
-            tr_acc, tr_round = self.write_logs()
-        return tr_acc, tr_round
+            tr_acc, tr_round , test_acc, test_round = self.write_logs()
+        return tr_acc, tr_round , test_acc, test_round
     def update_clients(self):
        # print("hello")
         for client in self.clients:
@@ -464,8 +464,8 @@ class APFLAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            tr_acc, tr_round = self.write_logs()
-        return tr_acc, tr_round
+            tr_acc, tr_round , test_acc, test_round = self.write_logs()
+        return tr_acc, tr_round , test_acc, test_round
     def update_clients(self):
         for client in self.clients:
 
@@ -543,13 +543,13 @@ class LoopLessLocalSGDAggregator(PersonalizedAggregator):
                 self.c_round += 1
 
                 if self.c_round % self.log_freq == 0:
-                    tr_acc, tr_round = self.write_logs()
-                return tr_acc, tr_round
+                    tr_acc, tr_round , test_acc, test_round = self.write_logs()
+                return tr_acc, tr_round , test_acc, test_round
         else:
             self.sample_clients()
             for client in self.sampled_clients:
                 client.step(single_batch_flag=True)
-            return tr_acc, tr_round
+            return tr_acc, tr_round , test_acc, test_round
 
 class ClusteredAggregator(Aggregator):
     """
@@ -653,8 +653,8 @@ class ClusteredAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            tr_acc, tr_round = self.write_logs()
-        return  tr_acc, tr_round
+            tr_acc, tr_round , test_acc, test_round = self.write_logs()
+        return  tr_acc, tr_round , test_acc, test_round
     def update_clients(self):
         for cluster_id, indices in enumerate(self.clusters_indices):
             cluster_learners = self.global_learners[cluster_id]
@@ -739,8 +739,8 @@ class AgnosticAggregator(CentralizedAggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            tr_acc, tr_round = self.write_logs()
-        return tr_acc, tr_round
+            tr_acc, tr_round , test_acc, test_round = self.write_logs()
+        return tr_acc, tr_round , test_acc, test_round
 class FFLAggregator(CentralizedAggregator):
     """
     Implements q-FedAvg from
@@ -808,8 +808,8 @@ class FFLAggregator(CentralizedAggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            tr_acc, tr_round = self.write_logs()
-        return tr_acc, tr_round
+            tr_acc, tr_round , test_acc, test_round = self.write_logs()
+        return tr_acc, tr_round , test_acc, test_round
 
 
 class DecentralizedAggregator(Aggregator):
@@ -879,5 +879,5 @@ class DecentralizedAggregator(Aggregator):
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:
-            tr_acc, tr_round = self.write_logs()
-        return tr_acc, tr_round
+            tr_acc, tr_round , test_acc, test_round = self.write_logs()
+        return tr_acc, tr_round , test_acc, test_round
