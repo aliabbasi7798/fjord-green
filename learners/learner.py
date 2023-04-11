@@ -182,7 +182,7 @@ class Learner:
             self.optimizer.zero_grad()
 
             #y_pred = self.model(x, p=p)
-            print(x.size())
+            #print(x.size())
             y_pred = self.model(x)
             loss_vec = self.criterion(y_pred, y)
             if weights is not None:
