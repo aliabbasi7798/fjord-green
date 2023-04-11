@@ -82,7 +82,8 @@ def get_learner(
         criterion = nn.CrossEntropyLoss(reduction="none").to(device)
         metric = accuracy
         #model = MedMNISTCNN2(num_classes=9).to(device)
-        model = get_resnet18(n_classes=9).to(device)
+        #model = get_resnet18(n_classes=9).to(device)
+        model = MedMnistBase(in_channels=3 , num_classes=9).to(device)
         is_binary_classification = False
     elif name == "cifar100":
         criterion = nn.CrossEntropyLoss(reduction="none").to(device)

@@ -443,14 +443,14 @@ def get_medmnist():
     data_train = []
     target_test = []
     data_test = []
-    print(medmnist_train[0][0].shape)
+    #print(medmnist_train[0][0].shape)
     for image, label in medmnist_test:
         target_test.append(label[0])
-        data_test.append(image.numpy())
+        data_test.append(np.asarray(image))
 
     for image, label in medmnist_train:
         target_train.append(label[0])
-        data_train.append(image.numpy())
+        data_train.append(np.asarray(image))
 
     medmnist_data =\
         torch.cat([
