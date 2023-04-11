@@ -11,6 +11,7 @@ def iid_divide(l, g):
     each group has either `int(len(l)/g)` or `int(len(l)/g)+1` elements
     returns a list of groups
     """
+    print("hello")
     num_elems = len(l)
     group_size = int(len(l) / g)
     num_big_groups = num_elems - g * group_size
@@ -82,8 +83,7 @@ def split_dataset_by_labels(dataset, n_classes, n_clients, n_clusters, alpha, fr
     clusters = {k: [] for k in range(n_clusters)}
     for idx in selected_indices:
         _, label = dataset[idx]
-        print(label)
-        group_id = label2cluster[label[0]]
+        group_id = label2cluster[label]
         clusters_sizes[group_id] += 1
         clusters[group_id].append(idx)
 

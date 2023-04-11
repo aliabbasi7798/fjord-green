@@ -77,17 +77,17 @@ Fjord on emnist dataset experiment
 
  module load conda/2021.11-python3.9 
 
- python run_experiment.py emnist Fjord \
+ python run_experiment.py medmnist Fjord \
     --n_learners 1 \
-    --n_rounds 500 \
-    --bz 16 \
+    --n_rounds 100 \
+    --bz 64 \
     --lr 0.1 \
     --lr_scheduler multi_step \
     --log_freq 5 \
-    --device cuda \
+    --device cpu \
     --optimizer sgd \
     --seed 1234 \
-    --logs_root ./logs_emnist \
+    --logs_root ./logs_medmnist \
     --verbose 1\
     --k 5\
     --sampling_rate 0.1
@@ -95,14 +95,14 @@ Fjord on emnist dataset experiment
 
 FedAvg experiment
 ```train
-python3  python run_experiment.py cifar10 FedAvg \
+python3  python run_experiment.py medmnist FedAvg \
     --n_learners 1 \
     --n_rounds 20 \
     --bz 128 \
     --lr 0.01 \
     --lr_scheduler multi_step \
     --log_freq 5 \
-    --device cuda \
+    --device cpu \
     --optimizer sgd \
     --seed 1234 \
     --logs_root ./logs \

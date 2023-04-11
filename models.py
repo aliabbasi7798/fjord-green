@@ -332,6 +332,95 @@ class FjordFemnistCNN2(nn.Module):
         return x
 
 
+class MedMNISTCNN2(nn.Module):
+    """
+        Implements a model with two convolutional layers followed by pooling, and a final dense layer with 10 units.
+    """
+
+
+    def __init__(self, num_classes):
+            super(MedMNISTCNN2, self).__init__()
+
+            self.layer1 = nn.Sequential(
+                nn.Conv2d(3, 16, kernel_size=3),
+                nn.BatchNorm2d(16),
+                nn.ReLU())
+
+            self.layer2 = nn.Sequential(
+                nn.Conv2d(16, 16, kernel_size=3),
+                nn.BatchNorm2d(16),
+                nn.ReLU(),
+                nn.MaxPool2d(kernel_size=2, stride=2))
+
+            self.layer3 = nn.Sequential(
+                nn.Conv2d(16, 64, kernel_size=3),
+                nn.BatchNorm2d(64),
+                nn.ReLU())
+
+            self.layer4 = nn.Sequential(
+                nn.Conv2d(64, 64, kernel_size=3),
+                nn.BatchNorm2d(64),
+                nn.ReLU())
+
+            self.layer5 = nn.Sequential(
+                nn.Conv2d(64, 64, kernel_size=3, padding=1),
+                nn.BatchNorm2d(64),
+                nn.ReLU(),
+                nn.MaxPool2d(kernel_size=2, stride=2))
+
+            self.fc = nn.Sequential(
+                nn.Linear(64 * 4 * 4, 128),
+                nn.ReLU(),
+                nn.Linear(128, 128),
+                nn.ReLU(),
+                nn.Linear(128, num_classes))
+
+
+    # def set_p(self , p):
+    #    self.p = p
+    def _masked(self, param, prev_param=None, dim=0):
+        if dim == 0:
+            _param = param[param.mask]
+        else:
+            _param = param[:, param.mask]
+        if prev_param is not None:
+            _param = _param[:, prev_param.mask]
+        return _param
+
+    def _get_mask(self, layer, dim=0, dropout_rate=1):
+        N = layer.shape[dim]
+        mask = np.zeros(N).astype(bool)
+        mask[:int(N * dropout_rate)] = True
+        return mask
+
+    def compute_masks(self):
+        self.layer1[0].weight.mask = self._get_mask(self.layer1[0].weight, dropout_rate=self.p)
+        self.layer2[0].weight.mask = self._get_mask(self.layer2[0].weight, dropout_rate=self.p)
+        self.layer3[0].weight.mask = self._get_mask(self.layer3[0].weight, dropout_rate=self.p)
+        self.layer4[0].weight.mask = self._get_mask(self.layer4[0].weight, dropout_rate=self.p)
+        self.layer5[0].weight.mask = self._get_mask(self.layer5[0].weight, dropout_rate=self.p)
+
+
+        self.fc[0].weight.mask = self._get_mask(self.fc[0].weight, dim=1, dropout_rate=self.p)
+        # self.output.weight.mask = self._get_mask(self.output.weight, dim=1, dropout_rate=self.p)
+
+    def forward(self, x, p=1):
+        self.p = p
+        # print(p)
+       # self.compute_masks()
+
+
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
+        x = self.layer4(x)
+        x = self.layer5(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+
+        return x
+
+
 '''
 
 class FjordFemnistCNN(nn.Module):

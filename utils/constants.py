@@ -9,6 +9,7 @@ LOADER_TYPE = {
     "emnist": "emnist",
     "femnist": "femnist",
     "shakespeare": "shakespeare",
+    "medmnist" : "medmnist",
 }
 
 EXTENSIONS = {
@@ -16,6 +17,7 @@ EXTENSIONS = {
     "cifar10": ".pkl",
     "cifar100": ".pkl",
     "emnist": ".pkl",
+    "medmnist" : ".pkl",
     "femnist": ".pt",
     "shakespeare": ".txt",
 }

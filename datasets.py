@@ -9,7 +9,8 @@ from torch.utils.data import Dataset
 
 import numpy as np
 from PIL import Image
-
+import medmnist
+from medmnist import INFO, Evaluator
 
 class TabularDataset(Dataset):
     """
@@ -141,6 +142,66 @@ class SubEMNIST(Dataset):
         return img, target, index
 
 
+class SubMEDMNIST(Dataset):
+    """
+    Constructs a subset of EMNIST dataset from a pickle file;
+    expects pickle file to store list of indices
+
+    Attributes
+    ----------
+    indices: iterable of integers
+    transform
+    data
+    targets
+
+    Methods
+    -------
+    __init__
+    __len__
+    __getitem__
+    """
+
+    def __init__(self, path, medmnist_data=None, medmnist_targets=None, transform=None):
+        """
+        :param path: path to .pkl file; expected to store list of indices
+        :param emnist_data: EMNIST dataset inputs
+        :param emnist_targets: EMNIST dataset labels
+        :param transform:
+        """
+        with open(path, "rb") as f:
+            self.indices = pickle.load(f)
+
+        if transform is None:
+            self.transform = \
+                Compose([
+                    ToTensor(),
+                    Normalize(
+                        (0.4914, 0.4822, 0.4465),
+                        (0.2023, 0.1994, 0.2010)
+                    )
+                ])
+
+        if medmnist_data is None or medmnist_targets is None:
+            self.data, self.targets = get_medmnist()
+        else:
+            self.data, self.targets = medmnist_data, medmnist_targets
+
+        self.data = self.data[self.indices]
+        self.targets = self.targets[self.indices]
+
+    def __len__(self):
+        return self.data.size(0)
+
+    def __getitem__(self, index):
+        img, target = self.data[index], int(self.targets[index])
+        print(type(img))
+        img = Image.fromarray(img.numpy(), 'RGB')
+
+        if self.transform is not None:
+            img = self.transform(img)
+
+        return img, target, index
+
 class SubCIFAR10(Dataset):
     """
     Constructs a subset of CIFAR10 dataset from a pickle file;
@@ -192,7 +253,7 @@ class SubCIFAR10(Dataset):
 
     def __getitem__(self, index):
         img, target = self.data[index], self.targets[index]
-
+        #print(type(img))
         img = Image.fromarray(img.numpy())
 
         if self.transform is not None:
@@ -338,7 +399,10 @@ def get_emnist():
             download=True,
             train=True
         )
-
+    #print(emnist_test.targets , emnist_test.data)
+   # imge , label in emnist_train[0]
+    #print(image , label)
+   # print(emnist_train[0][0].shape)
     emnist_data =\
         torch.cat([
             emnist_train.data,
@@ -353,6 +417,55 @@ def get_emnist():
 
     return emnist_data, emnist_targets
 
+def get_medmnist():
+    data_flag = 'pathmnist'
+    # data_flag = 'chestmnist'
+    download = True
+    print("hi")
+    info = INFO[data_flag]
+    task = info['task']
+    n_channels = info['n_channels']
+    n_classes = len(info['label'])
+    print(n_channels, n_classes)
+    DataClass = getattr(medmnist, info['python_class'])
+    N_CLASSES = n_classes
+
+
+    medmnist_train = \
+        DataClass(split='train', download=download)
+
+
+    medmnist_test = \
+        DataClass(split='test', download=download)
+
+    print(type(medmnist_train))
+    target_train = []
+    data_train = []
+    target_test = []
+    data_test = []
+    print(medmnist_train[0][0].shape)
+    for image, label in medmnist_test:
+        target_test.append(label[0])
+        data_test.append(image.numpy())
+
+    for image, label in medmnist_train:
+        target_train.append(label[0])
+        data_train.append(image.numpy())
+
+    medmnist_data =\
+        torch.cat([
+            torch.tensor(data_train),
+            torch.tensor(data_test)
+        ])
+
+    medmnist_targets =\
+        torch.cat([
+            torch.tensor(target_train),
+            torch.tensor(target_test)
+        ])
+    print(type(medmnist_train))
+    print()
+    return medmnist_data, medmnist_targets
 
 def get_cifar10():
     """
@@ -375,7 +488,7 @@ def get_cifar10():
             root=cifar10_path,
             train=False,
             download=False)
-
+    print(torch.tensor(cifar10_test.data))
     cifar10_data = \
         torch.cat([
             torch.tensor(cifar10_train.data),

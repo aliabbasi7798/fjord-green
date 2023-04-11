@@ -72,7 +72,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = -1,
+            green = 1,
             energyClient= 0.5,
             carbonIntensity = random.choice([0.1 ,10 ,1000]),
         )
@@ -170,6 +170,7 @@ def run_experiment(args_):
     time1 , time6 , time2 , num1 , num2 , num6= 0,0, 0, 0 , 0 , 0
     acc = 0
     while current_round <= args_.n_rounds:
+        print(current_round)
         tr_1, tr_2 ,testa, testr, time , p , energyC , carbon = aggregator.mix()
 
         if(len(testa) > 0):
@@ -220,6 +221,7 @@ def run_experiment(args_):
     return tr_acc, tr_round, test_acc, test_round
 
 if __name__ == "__main__":
+    print("hello")
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 

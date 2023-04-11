@@ -78,6 +78,12 @@ def get_learner(
         model = FjordCifar10CNN(num_classes=10 ).to(device)
         # model = get_resnet18(n_classes=10).to(device)
         is_binary_classification = False
+    elif name == "medmnist":
+        criterion = nn.CrossEntropyLoss(reduction="none").to(device)
+        metric = accuracy
+        #model = MedMNISTCNN2(num_classes=9).to(device)
+        model = get_resnet18(n_classes=9).to(device)
+        is_binary_classification = False
     elif name == "cifar100":
         criterion = nn.CrossEntropyLoss(reduction="none").to(device)
         metric = accuracy
@@ -221,11 +227,13 @@ def get_loaders(type_, root_path, batch_size, is_validation):
         inputs, targets = get_cifar100()
     elif type_ == "emnist":
         inputs, targets = get_emnist()
+    elif type_ == "medmnist":
+        inputs, targets = get_medmnist()
     else:
         inputs, targets = None, None
 
     train_iterators, val_iterators, test_iterators = [], [], []
-
+    print(inputs.size())
     for task_id, task_dir in enumerate(tqdm(os.listdir(root_path))):
         task_data_path = os.path.join(root_path, task_dir)
 
@@ -292,6 +300,8 @@ def get_loader(type_, path, batch_size, train, inputs=None, targets=None):
         dataset = SubCIFAR100(path, cifar100_data=inputs, cifar100_targets=targets)
     elif type_ == "emnist":
         dataset = SubEMNIST(path, emnist_data=inputs, emnist_targets=targets)
+    elif type_ == "medmnist":
+        dataset = SubMEDMNIST(path, medmnist_data=inputs, medmnist_targets=targets)
     elif type_ == "femnist":
         dataset = SubFEMNIST(path)
     elif type_ == "shakespeare":
