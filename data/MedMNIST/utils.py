@@ -138,7 +138,7 @@ def pathological_non_iid_split(dataset, n_classes, n_clients, n_classes_per_clie
     label2index = {k: [] for k in range(n_classes)}
     for idx in selected_indices:
         _, label = dataset[idx]
-        label2index[label].append(idx)
+        label2index[label[0]].append(idx)
 
     sorted_indices = []
     for label in label2index:

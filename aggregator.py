@@ -289,7 +289,7 @@ class NoCommunicationAggregator(Aggregator):
             client.step()
 
         self.c_round += 1
-
+        tr_acc, tr_round, test_acc, test_round = [] , [] , [] , []
         if self.c_round % self.log_freq == 0:
             tr_acc, tr_round , test_acc, test_round  = self.write_logs()
         return tr_acc, tr_round , test_acc, test_round

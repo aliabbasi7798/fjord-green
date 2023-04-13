@@ -79,7 +79,7 @@ Fjord on emnist dataset experiment
 
  python run_experiment.py medmnist Fjord \
     --n_learners 1 \
-    --n_rounds 100 \
+    --n_rounds 200 \
     --bz 64 \
     --lr 0.1 \
     --lr_scheduler multi_step \
@@ -95,13 +95,13 @@ Fjord on emnist dataset experiment
 
 FedAvg experiment
 ```train
-python3  python run_experiment.py medmnist FedAvg \
+python3  python run_experiment.py medmnist FedEM \
     --n_learners 1 \
-    --n_rounds 20 \
-    --bz 128 \
+    --n_rounds 50 \
+    --bz 16 \
     --lr 0.01 \
     --lr_scheduler multi_step \
-    --log_freq 5 \
+    --log_freq 2 \
     --device cpu \
     --optimizer sgd \
     --seed 1234 \
