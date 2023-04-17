@@ -89,7 +89,7 @@ def parse_args(args_list=None):
         '--local_steps',
         help='number of local steps before communication; default is 1',
         type=int,
-        default=1
+        default=10
     )
     parser.add_argument(
         '--log_freq',

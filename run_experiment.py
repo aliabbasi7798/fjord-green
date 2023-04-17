@@ -72,7 +72,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = 1,
+            green = -1,
             energyClient= 0.5,
             carbonIntensity = random.choice([0.1 ,10 ,1000]),
         )
@@ -273,7 +273,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , k])
 
     # name of csv file
-    filename = "medmnist_noniid_fedavg_E1_B128_c100.csv"
+    filename = "emnist_E1_nonIID_batch16_0.6_60.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:

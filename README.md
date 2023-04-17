@@ -79,15 +79,15 @@ Fjord on emnist dataset experiment
 
  python3 run_experiment.py emnist Fjord \
     --n_learners 1 \
-    --n_rounds 20 \
+    --n_rounds 100 \
     --bz 16\
     --lr 0.1 \
     --lr_scheduler multi_step \
-    --log_freq 5 \
+    --log_freq 2 \
     --device cpu \
     --optimizer sgd \
     --seed 1234 \
-    --logs_root ./logs_medmnist \
+    --logs_root ./logs_cifar10 \
     --verbose 1\
     --k 5\
     --sampling_rate 0.1

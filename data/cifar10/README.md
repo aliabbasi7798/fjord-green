@@ -40,7 +40,8 @@ We als o provide some additional options to split the dataset
 In order to generate the data split for Table 2 (Full client participation), run
 
 ```
-python generate_data.py \
+python3 generate_data.py \
+    --pathological_split\
     --n_tasks 80 \
     --n_components 3 \
     --alpha 0.4 \
