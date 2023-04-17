@@ -169,7 +169,7 @@ def run_experiment(args_):
     totalcommunicationEnergy , totalcomputationEnergy , totalEnergy = 0 , 0 , 0
     time1 , time6 , time2 , num1 , num2 , num6= 0,0, 0, 0 , 0 , 0
     acc = 0
-    modeProject = 0
+    modeProject = 1
     while current_round <= args_.n_rounds:
         if ( modeProject == 0):
             tr_1, tr_2 ,testa, testr = aggregator.mix()
@@ -273,7 +273,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , k])
 
     # name of csv file
-    filename = "medmnist_noniid_fedem_E1_B16_c100.csv"
+    filename = "medmnist_noniid_fedavg_E1_B128_c100.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
