@@ -103,11 +103,11 @@ class Client(object):
                 return 1
         elif(self.green == -1):
             if (self.carbonIntensity == 1000):
-                return 0.4
+                return 0.55
             elif (self.carbonIntensity == 10):
                 return 0.6
             else:
-                return 0.8
+                return 0.65
         elif (self.green == -3):
             if (self.carbonIntensity == 1000):
                 return 0.2
@@ -115,20 +115,13 @@ class Client(object):
                 return 1
         elif (self.green == -2):
             if (self.carbonIntensity > 753 and self.carbonIntensity <= 1124):
-                if (self.energyClient > 0.55):
-                    return 0.2
-                else:
-                    return 0.4
-            elif (self.carbonIntensity <= 384):
-                if (self.energyClient > 0.55):
-                    return 0.8
-                else:
-                    return 1
+               return 0.2
+            elif (self.carbonIntensity <= 233):
+                return 1
+            elif (self.carbonIntensity <=456):
             else:
-                if (self.energyClient > 0.55):
-                    return 0.5
-                else:
-                    return 0.7
+                return 0.6
+
         else:
             return self.green
     def select_p(self):

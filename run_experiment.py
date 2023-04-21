@@ -72,9 +72,10 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = -1,
+            green = -2,
             energyClient= 0.5,
-            carbonIntensity = random.choice([0.1 ,10 ,1000]),
+            carbonIntensity=random.randint(11 , 1124),
+            #carbonIntensity = random.choice([0.1 ,10 ,1000]),
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
         # max_cap the server send a F_max subnetwork
