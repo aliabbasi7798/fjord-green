@@ -72,7 +72,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = -2,
+            green = -4,
             energyClient= 0.5,
             carbonIntensity=random.randint(11 , 1124),
             #carbonIntensity = random.choice([0.1 ,10 ,1000]),

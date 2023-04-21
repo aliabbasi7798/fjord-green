@@ -114,14 +114,18 @@ class Client(object):
             else:
                 return 1
         elif (self.green == -2):
-            if (self.carbonIntensity > 753 and self.carbonIntensity <= 1124):
+            if (self.carbonIntensity > 901 and self.carbonIntensity <= 1124):
                return 0.2
-            elif (self.carbonIntensity <= 233):
-                return 1
-            elif (self.carbonIntensity <=456):
-            else:
+            elif (self.carbonIntensity <= 901 and self.carbonIntensity > 678):
+                return 0.4
+            elif (self.carbonIntensity > 456 and self.carbonIntensity <=678):
                 return 0.6
-
+            elif (self.carbonIntensity <= 456 and self.carbonIntensity > 233):
+                return 0.8
+            else:
+                return 1
+        elif (self.green == -4):
+            return round((self.carbonIntensity-11)/(1113/0.8) + 0.2 , 1)
         else:
             return self.green
     def select_p(self):
