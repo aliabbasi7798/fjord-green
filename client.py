@@ -125,7 +125,7 @@ class Client(object):
             else:
                 return 1
         elif (self.green == -4):
-            return round((self.carbonIntensity-11)/(1113/0.8) + 0.2 , 1)
+            return  round(1.2 - round((self.carbonIntensity-11)/(1113/0.8) + 0.21 , 1) , 1)
         else:
             return self.green
     def select_p(self):

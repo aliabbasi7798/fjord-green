@@ -72,10 +72,10 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = -4,
+            green = -3,
             energyClient= 0.5,
-            carbonIntensity=random.randint(11 , 1124),
-            #carbonIntensity = random.choice([0.1 ,10 ,1000]),
+            #carbonIntensity=random.randint(11 , 1124),
+            carbonIntensity = random.choice([0.1 ,1000]),
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
         # max_cap the server send a F_max subnetwork
@@ -193,11 +193,11 @@ def run_experiment(args_):
                 tr_round.append(tr_2[0])
                 test_acc.append(testa[0])
                 test_round.append(testr[0])
-            print(energyC)
+            #print(energyC)
             print(carbon)
             print(p)
             print(time)
-            print(acc)
+            #print(acc)
             if(acc < 0.6):
                 comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
@@ -214,7 +214,7 @@ def run_experiment(args_):
                         time2 += time[ti]
                         num2 = num2 +1
          #print(time1/num1 , time2/num2 , time6/num6)
-                print(comuEng, compEng)
+                #print(comuEng, compEng)
             else:
                 break
 
@@ -227,7 +227,7 @@ def run_experiment(args_):
     if (modeProject == 1) :
         totalEnergy = totalcomputationEnergy + totalcommunicationEnergy
         print(totalEnergy , totalcommunicationEnergy , totalcomputationEnergy)
-        print(time1/num1 , time6/num6 , time2/num2 , num1 , num6 , num2)
+        #print(time1/num1 , time6/num6 , time2/num2 , num1 , num6 , num2)
     if "save_path" in args_:
         save_root = os.path.join(args_.save_path)
         #print(3)
