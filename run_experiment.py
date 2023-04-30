@@ -72,7 +72,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = -3,
+            green = 1,
             energyClient= 0.5,
             #carbonIntensity=random.randint(11 , 1124),
             carbonIntensity = random.choice([0.1 ,1000]),
@@ -199,11 +199,11 @@ def run_experiment(args_):
             print(time)
             #print(acc)
             if(acc < 0.6):
-                comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 10, time , p , energyC , carbon)
+                comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 8, time , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng
 
-                for ti in range(10):
+                for ti in range(8):
                     if (p[ti] == 1):
                         time1 += time[ti]
                         num1 = num1 +1

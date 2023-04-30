@@ -77,7 +77,7 @@ Fjord on emnist dataset experiment
 
  module load conda/2021.11-python3.9 
 
- python3 run_experiment.py emnist Fjord \
+ python3 run_experiment.py cifar10 Fjord \
     --n_learners 1 \
     --n_rounds 100 \
     --bz 16\
@@ -86,7 +86,7 @@ Fjord on emnist dataset experiment
     --log_freq 3 \
     --device cuda \
     --optimizer sgd \
-    --seed 1234 \
+    --seed 12345 \
     --logs_root ./logs_cifar10 \
     --verbose 1\
     --k 5\

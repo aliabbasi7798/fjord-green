@@ -152,21 +152,20 @@ class FjordFemnistCNN(nn.Module):
         x = F.linear(x, self._masked(self.fc1.weight, dim=1), self.fc1.bias)
         return x
 
-class FjordCifar10CNN(nn.Module):
-    """
-        Implements a model with two convolutional layers followed by pooling, and a final dense layer with 10 units.
-    """
+
+class FjordCNNCifar10(nn.Module):
 
     def __init__(self, num_classes):
-        super(FjordCifar10CNN, self).__init__()
+        super(FjordCNNCifar10, self).__init__()
         self.p = 1
-        self.conv1 = nn.Conv2d(3, 10, 5)
+        self.conv1 = nn.Conv2d(3, 6, 5)
         self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(10, 20, 5)
-        self.fc1 = nn.Linear(1280, num_classes)
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        self.fc1 = nn.Linear(16 * 5 * 5, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, num_classes)
 
-
-   # def set_p(self , p):
+    # def set_p(self , p):
     #    self.p = p
     def _masked(self, param, prev_param=None, dim=0):
         if dim == 0:
@@ -192,34 +191,103 @@ class FjordCifar10CNN(nn.Module):
         self.conv2.bias.mask = self._get_mask(self.conv2.bias, dropout_rate=self.p)
 
         self.fc1.weight.mask = self._get_mask(self.fc1.weight, dim=1, dropout_rate=self.p)
-        #self.output.weight.mask = self._get_mask(self.output.weight, dim=1, dropout_rate=self.p)
+        # self.fc1.bias.mask = self._get_mask(self.fc1.bias, dim=1, dropout_rate=self.p)
+        self.fc2.weight.mask = self._get_mask(self.fc2.weight, dim=1, dropout_rate=self.p)
+        # self.fc2.bias.mask = self._get_mask(self.fc2.bias, dim=1, dropout_rate=self.p)
+        self.fc3.weight.mask = self._get_mask(self.fc3.weight, dim=1, dropout_rate=self.p)
+        # self.output.weight.mask = self._get_mask(self.output.weight, dim=1, dropout_rate=self.p)
 
     def forward(self, x, p=1):
         self.p = p
-       # print(p)
+        # print(p)
         self.compute_masks()
-        x = F.conv2d(
-            x,
-            self._masked(self.conv1.weight),
-            self._masked(self.conv1.bias),
-            1,  # stride
-            2  # padding
-        )
-        x = self.pool(F.relu(x))
-        # Second conv
-        x = F.conv2d(
-            x,
-            self._masked(self.conv2.weight, self.conv1.weight),
-            self._masked(self.conv2.bias),
-            1,  # stride
-            2  # padding
-        )
-        x = self.pool(F.relu(x))
-        #print(x.size(0))
-        x = x.view(x.size(0), -1)
-        x = F.linear(x, self._masked(self.fc1.weight, dim=1), self.fc1.bias)
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(-1, 16 * 5 * 5)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+
         return x
 
+
+class AlexCifar100(nn.Module):
+    def __init__(self, num_classes=100):
+        super(AlexCifar100, self).__init__()
+        self.p = 1
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+            nn.Conv2d(64, 192, kernel_size=5, padding=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+            nn.Conv2d(192, 384, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(384, 256, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2)
+        )
+
+        self.adaptive_avg_pool2d = nn.AdaptiveAvgPool2d((6, 6))
+        self.flatten = nn.Flatten(start_dim=1)
+        self.classifier = nn.Sequential(
+            nn.Linear(256 * 6 * 6, 4096),
+            nn.ReLU(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(),
+            nn.Linear(4096, num_classes)
+        )
+
+    def _masked(self, param, prev_param=None, dim=0):
+        if dim == 0:
+            _param = param[param.mask]
+        else:
+            _param = param[:, param.mask]
+        if prev_param is not None:
+            _param = _param[:, prev_param.mask]
+        return _param
+
+    def _get_mask(self, layer, dim=0, dropout_rate=1):
+        N = layer.shape[dim]
+        mask = np.zeros(N).astype(bool)
+        mask[:int(N * dropout_rate)] = True
+        return mask
+
+    def compute_masks(self):
+        self.features[0].weight.mask = self._get_mask(self.features[0].weight, dropout_rate=self.p)
+        self.features[0].bias.mask = self._get_mask(self.features[0].bias, dropout_rate=self.p)
+
+        self.features[3].weight.mask = self._get_mask(self.features[3].weight, dropout_rate=self.p)
+        self.features[3].weight.prev_mask = self.features[0].weight.mask
+        self.features[3].bias.mask = self._get_mask(self.features[3].bias, dropout_rate=self.p)
+
+        self.features[6].weight.mask = self._get_mask(self.features[6].weight, dropout_rate=self.p)
+        self.features[6].weight.prev_mask = self.features[3].weight.mask
+        self.features[6].bias.mask = self._get_mask(self.features[6].bias, dropout_rate=self.p)
+
+        self.features[8].weight.mask = self._get_mask(self.features[8].weight, dropout_rate=self.p)
+        self.features[8].weight.prev_mask = self.features[6].weight.mask
+        self.features[8].bias.mask = self._get_mask(self.features[8].bias, dropout_rate=self.p)
+
+        self.features[10].weight.mask = self._get_mask(self.features[10].weight, dropout_rate=self.p)
+        self.features[10].weight.prev_mask = self.features[8].weight.mask
+        self.features[10].bias.mask = self._get_mask(self.features[10].bias, dropout_rate=self.p)
+
+        self.classifier[0].weight.mask = self._get_mask(self.classifier[0].weight, dim=1, dropout_rate=self.p)
+        self.classifier[2].weight.mask = self._get_mask(self.classifier[2].weight, dim=1, dropout_rate=self.p)
+        self.classifier[4].weight.mask = self._get_mask(self.classifier[4].weight, dim=1, dropout_rate=self.p)
+
+    def forward(self, x, p=1):
+        self.p = p
+        self.compute_masks()
+        x = self.features(x)
+        x = self.adaptive_avg_pool2d(x)
+        x = self.flatten(x)
+        x = self.classifier(x)
+        return x
 class CIFAR10CNN(nn.Module):
     def __init__(self, num_classes):
         super(CIFAR10CNN, self).__init__()

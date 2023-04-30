@@ -65,9 +65,9 @@ We als o provide some additional options to split the dataset
 In order to generate the data split for Table 2 (Full client participation), run
 
 ```
-python generate_data.py \
+python3 generate_data.py \
     --n_tasks 100 \
-    --pachinko_allocation_split \
+    --pathological_split \
     --alpha 0.4 \
     --beta 10 \
     --s_frac 1.0 \
