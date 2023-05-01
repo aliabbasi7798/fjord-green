@@ -72,7 +72,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = 1,
+            green = -3,
             energyClient= 0.5,
             #carbonIntensity=random.randint(11 , 1124),
             carbonIntensity = random.choice([0.1 ,1000]),
@@ -90,7 +90,7 @@ def run_experiment(args_):
     torch.manual_seed(args_.seed)
 
     data_dir = get_data_dir(args_.experiment)
-
+    #torch.cuda.empty_cache()
     if "logs_root" in args_:
         logs_root = args_.logs_root
     else:

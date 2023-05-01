@@ -11,7 +11,7 @@ from torchvision.transforms import Compose, ToTensor, Normalize
 from torch.utils.data import ConcatDataset
 
 from sklearn.model_selection import train_test_split
-
+from torchvision import datasets, transforms
 from utils import split_dataset_by_labels, pathological_non_iid_split, pachinko_allocation_split
 
 
@@ -127,10 +127,13 @@ def parse_args():
 def main():
     args = parse_args()
 
-    transform = Compose([
-        ToTensor(),
-        Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
-    ])
+    transform = transforms.Compose(
+        [
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        ])
 
     dataset =\
         ConcatDataset([

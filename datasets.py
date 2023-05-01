@@ -4,7 +4,7 @@ import string
 
 import torch
 from torchvision.datasets import CIFAR10, CIFAR100, EMNIST
-from torchvision.transforms import Compose, ToTensor, Normalize
+from torchvision.transforms import Compose, ToTensor, Normalize, Resize, CenterCrop
 from torch.utils.data import Dataset
 
 import numpy as np
@@ -295,6 +295,8 @@ class SubCIFAR100(Dataset):
         if transform is None:
             self.transform = \
                 Compose([
+                    Resize(256),
+                    CenterCrop(224),
                     ToTensor(),
                     Normalize(
                         (0.4914, 0.4822, 0.4465),
