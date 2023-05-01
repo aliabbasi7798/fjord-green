@@ -233,6 +233,8 @@ class SubCIFAR10(Dataset):
         if transform is None:
             self.transform = \
                 Compose([
+                    #Resize(256),
+                    #CenterCrop(224),
                     ToTensor(),
                     Normalize(
                         (0.4914, 0.4822, 0.4465),
@@ -490,7 +492,7 @@ def get_cifar10():
             root=cifar10_path,
             train=False,
             download=False)
-    print(torch.tensor(cifar10_test.data))
+    #print(torch.tensor(cifar10_test.data))
     cifar10_data = \
         torch.cat([
             torch.tensor(cifar10_train.data),

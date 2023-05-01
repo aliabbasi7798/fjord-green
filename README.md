@@ -77,13 +77,13 @@ Fjord on emnist dataset experiment
 
  module load conda/2021.11-python3.9 
 
- python3 run_experiment.py cifar100 Fjord \
+ python3 run_experiment.py cifar10 Fjord \
     --n_learners 1 \
     --n_rounds 100 \
-    --bz 2\
+    --bz 16\
     --lr 0.1 \
     --lr_scheduler multi_step \
-    --log_freq 3 \
+    --log_freq 5 \
     --device cuda \
     --optimizer sgd \
     --seed 12345 \

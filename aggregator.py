@@ -167,8 +167,9 @@ class Aggregator(ABC):
             total_n_test_samples = 0
 
             for client_id, client in enumerate(clients):
-
+                #print("loggg")
                 train_loss, train_acc, test_loss, test_acc = client.write_logs()
+                #print("log1")
                 # print(f"train_loss {train_loss}, train_acc {train_acc}, test_loss {test_loss}, test_acc {test_acc}")
                 if self.verbose > 1:
                     print("*" * 30)
@@ -210,6 +211,8 @@ class Aggregator(ABC):
 
         if self.verbose > 0:
             print("#" * 80)
+
+
         return tr_acc, tr_round, tst_acc , tst_round
     def save_state(self, dir_path):
         """
@@ -375,7 +378,7 @@ class FjordAggregator(Aggregator):
             tr_acc, tr_round , test_acc, test_round = self.write_logs()
         return tr_acc, tr_round ,test_acc, test_round, timeArr , pArr , energyC , carbonIntensity
     def update_clients(self):
-        print("hello")
+        print("hello1")
         for client in self.clients:
             #print(client.selectgreen_p())
             for learner_id, learner in enumerate(client.learners_ensemble):

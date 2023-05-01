@@ -90,7 +90,7 @@ def run_experiment(args_):
     torch.manual_seed(args_.seed)
 
     data_dir = get_data_dir(args_.experiment)
-    #torch.cuda.empty_cache()
+
     if "logs_root" in args_:
         logs_root = args_.logs_root
     else:
@@ -172,6 +172,7 @@ def run_experiment(args_):
     acc = 0
     modeProject = 1
     while current_round <= args_.n_rounds:
+        #torch.cuda.empty_cache()
         if ( modeProject == 0):
             tr_1, tr_2 ,testa, testr = aggregator.mix()
             if (len(testa) > 0):
@@ -198,7 +199,7 @@ def run_experiment(args_):
             print(p)
             print(time)
             #print(acc)
-            if(acc < 0.6):
+            if(acc < 0.3):
                 comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 8, time , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng

@@ -180,7 +180,7 @@ class Learner:
                 y = y.type(torch.float32).unsqueeze(1)
 
             self.optimizer.zero_grad()
-
+            #print(x)
             y_pred = self.model(x, p=p)
             #print(x.size())
             #y_pred = self.model(x)

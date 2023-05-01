@@ -179,20 +179,24 @@ class Client(object):
         return client_updates
 
     def write_logs(self):
+        #print("log1c")
         if self.tune_locally:
             self.update_tuned_learners()
 
         if self.tune_locally:
             train_loss, train_acc = self.tuned_learners_ensemble.evaluate_iterator(self.val_iterator)
+
             test_loss, test_acc = self.tuned_learners_ensemble.evaluate_iterator(self.test_iterator)
         else:
             train_loss, train_acc = self.learners_ensemble.evaluate_iterator(self.val_iterator)
             test_loss, test_acc = self.learners_ensemble.evaluate_iterator(self.test_iterator)
-
+        #print("log2c")
+        #print(train_loss)
         self.logger.add_scalar("Train/Loss", train_loss, self.counter)
         self.logger.add_scalar("Train/Metric", train_acc, self.counter)
         self.logger.add_scalar("Test/Loss", test_loss, self.counter)
         self.logger.add_scalar("Test/Metric", test_acc, self.counter)
+        #print("log3c")
 
         return train_loss, train_acc, test_loss, test_acc
 
