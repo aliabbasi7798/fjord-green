@@ -79,9 +79,9 @@ Fjord on emnist dataset experiment
 
  python3 run_experiment.py cifar10 Fjord \
     --n_learners 1 \
-    --n_rounds 100 \
-    --bz 16\
-    --lr 0.1 \
+    --n_rounds 200 \
+    --bz 2\
+    --lr 0.01 \
     --lr_scheduler multi_step \
     --log_freq 5 \
     --device cuda \
@@ -90,7 +90,7 @@ Fjord on emnist dataset experiment
     --logs_root ./logs_cifar10 \
     --verbose 1\
     --k 5\
-    --sampling_rate 0.1
+    --sampling_rate 0.2
 ```
 
 FedAvg experiment

@@ -38,7 +38,9 @@ def init_clients(args_, root_path, logs_root):
     clients_ = []
     for task_id, (train_iterator, val_iterator, test_iterator) in \
             enumerate(tqdm(zip(train_iterators, val_iterators, test_iterators), total=len(train_iterators))):
-
+        if len(clients_) >= 200:
+            print(len(clients_))
+            break
         if train_iterator is None or test_iterator is None:
             continue
 # get client model instance 
@@ -72,7 +74,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = -3,
+            green = 0.6,
             energyClient= 0.5,
             #carbonIntensity=random.randint(11 , 1124),
             carbonIntensity = random.choice([0.1 ,1000]),
@@ -172,7 +174,7 @@ def run_experiment(args_):
     acc = 0
     modeProject = 1
     while current_round <= args_.n_rounds:
-        #torch.cuda.empty_cache()
+        torch.cuda.empty_cache()
         if ( modeProject == 0):
             tr_1, tr_2 ,testa, testr = aggregator.mix()
             if (len(testa) > 0):
@@ -198,13 +200,13 @@ def run_experiment(args_):
             print(carbon)
             print(p)
             print(time)
-            #print(acc)
-            if(acc < 0.3):
-                comuEng, compEng = Carbon.carbonEmission(15 , 20 , 20 , 0.0532 , 0.0532, 8, time , p , energyC , carbon)
+            print(acc)
+            if(acc < 0.5):
+                comuEng, compEng = Carbon.carbonEmission(1500 , 20 , 20 , 0.0532 , 0.0532, 4, time , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng
 
-                for ti in range(8):
+                for ti in range(4):
                     if (p[ti] == 1):
                         time1 += time[ti]
                         num1 = num1 +1

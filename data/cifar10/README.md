@@ -42,7 +42,7 @@ In order to generate the data split for Table 2 (Full client participation), run
 ```
 python3 generate_data.py \
     --pathological_split\
-    --n_tasks 80 \
+    --n_tasks 20 \
     --n_components 3 \
     --alpha 0.4 \
     --s_frac 1.0 \

@@ -233,8 +233,8 @@ class SubCIFAR10(Dataset):
         if transform is None:
             self.transform = \
                 Compose([
-                    #Resize(256),
-                    #CenterCrop(224),
+                    Resize(256),
+                    CenterCrop(224),
                     ToTensor(),
                     Normalize(
                         (0.4914, 0.4822, 0.4465),
