@@ -75,7 +75,7 @@ def init_clients(args_, root_path, logs_root):
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
             green = 0.6,
-            energyClient= 0.5,
+            energyClient= 65,
             #carbonIntensity=random.randint(11 , 1124),
             carbonIntensity = random.choice([0.1 ,1000]),
         )
@@ -172,7 +172,9 @@ def run_experiment(args_):
     totalcommunicationEnergy , totalcomputationEnergy , totalEnergy = 0 , 0 , 0
     time1 , time6 , time2 , num1 , num2 , num6= 0,0, 0, 0 , 0 , 0
     acc = 0
+
     modeProject = 1
+    accuracycarbon =[]
     while current_round <= args_.n_rounds:
         torch.cuda.empty_cache()
         if ( modeProject == 0):
@@ -196,15 +198,17 @@ def run_experiment(args_):
                 tr_round.append(tr_2[0])
                 test_acc.append(testa[0])
                 test_round.append(testr[0])
+                accuracycarbon.append(totalcomputationEnergy+totalcommunicationEnergy)
             #print(energyC)
             print(carbon)
             print(p)
             print(time)
             print(acc)
             if(acc < 0.5):
-                comuEng, compEng = Carbon.carbonEmission(1500 , 20 , 20 , 0.0532 , 0.0532, 4, time , p , energyC , carbon)
+                comuEng, compEng = Carbon.carbonEmission(240 , 41 , 10 , 4 , 10 , 4, time , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng
+
 
                 for ti in range(4):
                     if (p[ti] == 1):
@@ -236,7 +240,7 @@ def run_experiment(args_):
         #print(3)
         os.makedirs(save_root, exist_ok=True)
         aggregator.save_state(save_root)
-    return tr_acc, tr_round, test_acc, test_round
+    return tr_acc, tr_round, test_acc, test_round, accuracycarbon
 
 if __name__ == "__main__":
     print("hello")
@@ -244,12 +248,13 @@ if __name__ == "__main__":
     torch.backends.cudnn.benchmark = False
 
     args = parse_args()
-    tr_acc, tr_round , test_acc , test_round = run_experiment(args)
+    tr_acc, tr_round , test_acc , test_round, accuracycarbon = run_experiment(args)
 
     print(tr_acc)
     print(tr_round)
     print(test_acc)
     print(test_round)
+    print(accuracycarbon)
     import matplotlib
     import matplotlib.pyplot as plt
 
@@ -270,14 +275,14 @@ if __name__ == "__main__":
     import csv
     k = 0
     # field names
-    fields = ['Test Accuracy', 'Rounds' , 'k']
+    fields = ['Test Accuracy', 'Rounds' , 'cost']
     rows = []
     # data rows of csv file
     for i in range(len(test_round)):
-        rows.append([test_round[i] , test_acc[i] , k])
+        rows.append([test_round[i] , test_acc[i] , accuracycarbon[i]])
 
     # name of csv file
-    filename = "emnist_E1_nonIID_batch16_0.6_60.csv"
+    filename = "cifar10_b2_e1_alex_50.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
