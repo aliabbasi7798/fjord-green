@@ -91,7 +91,7 @@ class Client(object):
 
         self.counter = 0
         self.logger = logger
-        self.__p = max(self.possible_p_list)
+        self.__p = self.selectgreen_p()
     def selectgreen_p(self):
         temp = self.carbonIntensity * self.energyClient
         if(self. green == 0):
