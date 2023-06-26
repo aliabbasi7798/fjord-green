@@ -203,7 +203,7 @@ def run_experiment(args_):
             print(carbon)
             print(p)
 
-            if(acc < 1):
+            if(totalEnergy < 20):
                 comuEng, compEng = Carbon.carbonEmission(240 , 41 , 10 , 4 , 10 , 10, 5, 4 , 600 , 0.01 , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng
@@ -270,7 +270,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "emnist-E=5_1cluster.csv"
+    filename = "emnist-E=5_1cluster_fixcarbon20.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
