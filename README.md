@@ -90,7 +90,7 @@ Fjord on emnist dataset experiment
     --logs_root ./logs_cifar10 \
     --verbose 1\
     --k 5\
-    --sampling_rate 0.2
+    --sampling_rate 0.1
 ```
 
 FedAvg experiment

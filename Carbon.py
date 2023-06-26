@@ -1,10 +1,11 @@
 
-def carbonEmission(modelSize , uploadRate , downloadRate  , eRouter , eClient, numberClient, time , pArr , energyC , carbonIntensity):
+def carbonEmission(modelSize , uploadRate , downloadRate  , eRouter , eClient, numberClient, numberEpoches , frequency , numberofsmaples , workload , pArr , energyC , carbonIntensity):
     carbonfactor = carbonIntensity
     comuCarbon , compCarbon = 0 , 0
+    computationparam = (numberEpoches * numberofsmaples * workload) / frequency
     for i in range(numberClient):
         comutemp , comptemp = energy(modelSize * pArr[i], uploadRate, downloadRate, eRouter,
-                                     eClient, time[i], energyC[i])
+                                     eClient, computationparam, energyC[i])
         #print(carbonfactor[i] , pArr[i] , time[i])
         #print(comptemp)
 

@@ -202,26 +202,15 @@ def run_experiment(args_):
             #print(energyC)
             print(carbon)
             print(p)
-            print(time)
+            #print(time)
             print(acc)
-            if(acc < 0.5):
-                comuEng, compEng = Carbon.carbonEmission(240 , 41 , 10 , 4 , 10 , 4, time , p , energyC , carbon)
+            if(acc < 1):
+                comuEng, compEng = Carbon.carbonEmission(240 , 41 , 10 , 4 , 10 , 4, 1, 5 , 600 , 0.01 , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng
 
 
-                for ti in range(4):
-                    if (p[ti] == 1):
-                        time1 += time[ti]
-                        num1 = num1 +1
-                    elif(p[ti] == 0.6):
-                        time6 += time[ti]
-                        num6 = num6+1
-                    else:
-                        time2 += time[ti]
-                        num2 = num2 +1
-         #print(time1/num1 , time2/num2 , time6/num6)
-                #print(comuEng, compEng)
+
             else:
                 break
 
