@@ -76,8 +76,8 @@ def init_clients(args_, root_path, logs_root):
             k=args_.k,
             green = 0.6,
             energyClient= 65,
-            #carbonIntensity=random.randint(11 , 1124),
-            carbonIntensity = random.choice([0.1 ,1000]),
+            carbonIntensity=random.randint(11 , 1124),
+            #carbonIntensity = random.choice([0.1 ,1000]),
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
         # max_cap the server send a F_max subnetwork
@@ -164,17 +164,16 @@ def run_experiment(args_):
             seed=args_.seed,
             k=args.k
         )
-    tr_acc, tr_round ,test_acc, test_round, times , ps = [], [], [], [], [], []
+    tr_acc, tr_round ,test_acc, test_round, times , ps  , carbonEmmited= [], [], [], [], [], [] , []
     print("Training..")
     # just a progress bar
     pbar = tqdm(total=args_.n_rounds)
     current_round = 0
     totalcommunicationEnergy , totalcomputationEnergy , totalEnergy = 0 , 0 , 0
-    time1 , time6 , time2 , num1 , num2 , num6= 0,0, 0, 0 , 0 , 0
     acc = 0
 
     modeProject = 1
-    accuracycarbon =[]
+
     while current_round <= args_.n_rounds:
         torch.cuda.empty_cache()
         if ( modeProject == 0):
@@ -185,6 +184,7 @@ def run_experiment(args_):
                 tr_round.append(tr_2[0])
                 test_acc.append(testa[0])
                 test_round.append(testr[0])
+                carbonEmmited.append(totalEnergy)
             if aggregator.c_round != current_round:
                 pbar.update(1)
                 current_round = aggregator.c_round
@@ -198,18 +198,17 @@ def run_experiment(args_):
                 tr_round.append(tr_2[0])
                 test_acc.append(testa[0])
                 test_round.append(testr[0])
-                accuracycarbon.append(totalcomputationEnergy+totalcommunicationEnergy)
-            #print(energyC)
+                carbonEmmited.append(totalEnergy)
+
             print(carbon)
             print(p)
-            #print(time)
-            print(acc)
+
             if(acc < 1):
-                comuEng, compEng = Carbon.carbonEmission(240 , 41 , 10 , 4 , 10 , 4, 1, 5 , 600 , 0.01 , p , energyC , carbon)
+                comuEng, compEng = Carbon.carbonEmission(240 , 41 , 10 , 4 , 10 , 10, 5, 4 , 600 , 0.01 , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng
-
-
+                totalEnergy = (totalcomputationEnergy + totalcommunicationEnergy)/(3.6*1000000)
+                print(totalEnergy)
 
             else:
                 break
@@ -221,15 +220,15 @@ def run_experiment(args_):
                 current_round = aggregator.c_round
         #print(2)
     if (modeProject == 1) :
-        totalEnergy = totalcomputationEnergy + totalcommunicationEnergy
+        totalEnergy = (totalcomputationEnergy + totalcommunicationEnergy)/(3.6*1000000)
         print(totalEnergy , totalcommunicationEnergy , totalcomputationEnergy)
-        #print(time1/num1 , time6/num6 , time2/num2 , num1 , num6 , num2)
+        print(carbon)
     if "save_path" in args_:
         save_root = os.path.join(args_.save_path)
         #print(3)
         os.makedirs(save_root, exist_ok=True)
         aggregator.save_state(save_root)
-    return tr_acc, tr_round, test_acc, test_round, accuracycarbon
+    return tr_acc, tr_round, test_acc, test_round, carbonEmmited
 
 if __name__ == "__main__":
     print("hello")
@@ -237,13 +236,13 @@ if __name__ == "__main__":
     torch.backends.cudnn.benchmark = False
 
     args = parse_args()
-    tr_acc, tr_round , test_acc , test_round, accuracycarbon = run_experiment(args)
+    tr_acc, tr_round , test_acc , test_round, carbonEmmited = run_experiment(args)
 
     print(tr_acc)
     print(tr_round)
     print(test_acc)
     print(test_round)
-    print(accuracycarbon)
+    print(carbonEmmited)
     import matplotlib
     import matplotlib.pyplot as plt
 
@@ -268,10 +267,10 @@ if __name__ == "__main__":
     rows = []
     # data rows of csv file
     for i in range(len(test_round)):
-        rows.append([test_round[i] , test_acc[i] , accuracycarbon[i]])
+        rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "cifar10_b2_e1_alex_50.csv"
+    filename = "emnist-E=5_1cluster.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:

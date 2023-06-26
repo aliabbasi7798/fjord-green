@@ -77,7 +77,7 @@ def parse_args(args_list=None):
         '--n_rounds',
         help='number of communication rounds; default is 1',
         type=int,
-        default=1
+        default=5
     )
     parser.add_argument(
         '--bz',
