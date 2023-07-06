@@ -74,7 +74,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = 1,
+            green = 0.6,
             energyClient= 65,
             carbonIntensity=random.randint(11 , 1124),
             #carbonIntensity = random.choice([0.1 ,1000]),
@@ -204,11 +204,12 @@ def run_experiment(args_):
             print(p)
 
             if(totalEnergy < 10):
-                comuEng, compEng = Carbon.carbonEmission(8 , 41 , 10 , 4 , 10 , 10, 5, 4 , 600 , 0.1 , p , energyC , carbon)
+                comuEng, compEng = Carbon.carbonEmission(8 , 41 , 10 , 4 , 10 , 10, 1, 400 , 600 , 2 , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng
+
                 totalEnergy = (totalcomputationEnergy + totalcommunicationEnergy)/(3.6*1000000)
-                print(totalEnergy)
+                print(totalEnergy , totalcommunicationEnergy , totalcomputationEnergy)
 
             else:
                 break
@@ -270,7 +271,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "Non_IID_emnist-E=1_0cluster_fixcarbon10_test.csv"
+    filename = "Non_IID_emnist-E=1_1cluster_fixcarbon10_final.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
