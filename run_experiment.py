@@ -204,7 +204,7 @@ def run_experiment(args_):
             print(p)
 
             if(totalEnergy < 10):
-                comuEng, compEng = Carbon.carbonEmission(8 , 41 , 10 , 4 , 10 , 10, 1, 400 , 600 , 2 , p , energyC , carbon)
+                comuEng, compEng = Carbon.carbonEmission(8 , 41 , 10 , 4 , 10 , 10, 1, 2000 , 6000 , 2 , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng
 
@@ -244,23 +244,9 @@ if __name__ == "__main__":
     print(test_acc)
     print(test_round)
     print(carbonEmmited)
-    import matplotlib
-    import matplotlib.pyplot as plt
 
-    matplotlib.use('Agg')
-    # Plot Loss curve
-    '''
-    plt.figure()
-    plt.title('Train accuracy')
-    # Plot Loss curve
-    plt.plot(tr_round, tr_acc, color='r', label='Fjord')
 
-    plt.legend()
-    plt.ylabel('test accuracy')
-    plt.xlabel('Communication Rounds')
-    plt.savefig('save/plot3.png')
-    # importing the csv module
-    '''
+
     import csv
     k = 0
     # field names
@@ -271,7 +257,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "Non_IID_emnist-E=1_1cluster_fixcarbon10_final.csv"
+    filename = "Non_IID_emnist-E=1_0cluster_fixcarbon10.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:

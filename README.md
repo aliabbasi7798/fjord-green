@@ -84,7 +84,7 @@ Fjord on emnist dataset experiment
     --lr 0.1 \
     --lr_scheduler multi_step \
     --log_freq 1 \
-    --device cuda \
+    --device cpu \
     --optimizer sgd \
     --seed 12345 \
     --logs_root ./logs_cifar10 \
