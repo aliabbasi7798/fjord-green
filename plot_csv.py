@@ -6,7 +6,7 @@ if __name__ == "__main__":
     y1 = []
     z1 = []
 
-    with open('Non_IID_emnist-E=5_0cluster_fixcarbon30_final.csv', 'r') as csvfile:
+    with open('Non_IID_emnist-E=5_0cluster_fixcarbon30.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
         i=0
         for row in plots:
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     y2 = []
     z2 = []
 
-    with open('Non_IID_emnist-E=5_1cluster_fixcarbon30_final.csv', 'r') as csvfile:
+    with open('Non_IID_emnist-E=5_1cluster_fixcarbon30.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     y3 = []
     z3 = []
 
-    with open('Non_IID_emnist-E=5_2cluster_fixcarbon30_final.csv', 'r') as csvfile:
+    with open('Non_IID_emnist-E=5_2cluster_fixcarbon30.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('Non_IID_emnist-E=5_3cluster_fixcarbon30_final.csv', 'r') as csvfile:
+    with open('Non_IID_emnist-E=5_3cluster_fixcarbon30.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     # Plot Loss curve
 
     plt.figure()
-    plt.title('Non-IID EMNIST')
+    plt.title('Non-IID EMNIST(E=1)')
     # Plot Loss curve
 
 
@@ -82,4 +82,4 @@ if __name__ == "__main__":
     plt.legend()
     plt.ylabel('test accuracy')
     plt.xlabel('Carbon Cost(kg)')
-    plt.savefig('save/plot-test_5.png')
+    plt.savefig('save/plot-test_6.png')
