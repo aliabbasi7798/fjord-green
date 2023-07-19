@@ -6,7 +6,7 @@ if __name__ == "__main__":
     y1 = []
     z1 = []
 
-    with open('Non_IID_emnist-E=5_0cluster_fixcarbon30.csv', 'r') as csvfile:
+    with open('Non_IID_emnist-E=5_1cluster_fixcarbon30.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
         i=0
         for row in plots:
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     y2 = []
     z2 = []
 
-    with open('Non_IID_emnist-E=5_1cluster_fixcarbon30.csv', 'r') as csvfile:
+    with open('Non_IID_emnist-E=5_1cluster_fixcarbon30_m=0.8.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     y3 = []
     z3 = []
 
-    with open('Non_IID_emnist-E=5_2cluster_fixcarbon30.csv', 'r') as csvfile:
+    with open('Non_IID_emnist-E=5_1cluster_fixcarbon30_m=0.4.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('Non_IID_emnist-E=5_3cluster_fixcarbon30.csv', 'r') as csvfile:
+    with open('Non_IID_emnist-E=5_0cluster_fixcarbon30.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -59,8 +59,20 @@ if __name__ == "__main__":
 
             i = i + 1
 
+    x5 = []
+    y5 = []
+    z5 = []
 
+    with open('Non_IID_emnist-E=5_1cluster_fixcarbon30_m=0.2.csv', 'r') as csvfile:
+        plots = csv.reader(csvfile, delimiter=',')
 
+        i = 0
+        for row in plots:
+            if (i > 0):
+                x5.append(float(row[2]))
+                y5.append(float(row[1]))
+
+            i = i + 1
 
     # Plot a graph
 
@@ -68,18 +80,18 @@ if __name__ == "__main__":
     # Plot Loss curve
 
     plt.figure()
-    plt.title('Non-IID EMNIST(E=1)')
+    plt.title('Non-IID EMNIST(E=5)')
     # Plot Loss curve
 
 
-    plt.plot(x1, y1, color='r', label='0cluster(p=1)')
-    plt.plot(x2, y2, color='b', label='1cluster(p=0.6)')
-    plt.plot(x3, y3, color='g', label='2cluster(p=0.2 , 1)')
+    plt.plot(x1, y1, color='r', label='1 cluster m= 0.6 , sd=0')
+    plt.plot(x2, y2, color='b', label='1 cluster m= 0.8 , sd=0')
+    plt.plot(x3, y3, color='g', label='1 cluster m= 0.4 , sd=0')
 
-    plt.plot(x4, y4, color='k', label='3cluster(p=0.2 , 0.6 , 1)')
-
+    plt.plot(x4, y4, color='k', label='1 cluster m= 1 , sd=0')
+    plt.plot(x5, y5, color='m', label='3 cluster m= 0.2 , sd=0')
 
     plt.legend()
     plt.ylabel('test accuracy')
     plt.xlabel('Carbon Cost(kg)')
-    plt.savefig('save/plot-test_6.png')
+    plt.savefig('save/cluster(E=5)_m.png')
