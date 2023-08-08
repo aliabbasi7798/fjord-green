@@ -79,12 +79,12 @@ Fjord on emnist dataset experiment
 
  python3 run_experiment.py emnist Fjord \
     --n_learners 1 \
-    --n_rounds 100 \
+    --n_rounds 200 \
     --bz 16\
     --lr 0.1 \
     --lr_scheduler multi_step \
-    --log_freq 1 \
-    --device cpu \
+    --log_freq 3 \
+    --device cuda \
     --optimizer sgd \
     --seed 12345 \
     --logs_root ./logs_cifar10 \
@@ -95,7 +95,7 @@ Fjord on emnist dataset experiment
 
 FedAvg experiment
 ```train
-python3  python3 run_experiment.py medmnist FedAvg \
+ python3 run_experiment.py emnist FedAvg \
     --n_learners 1 \
     --n_rounds 50 \
     --bz 128 \

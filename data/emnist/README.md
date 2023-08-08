@@ -42,13 +42,14 @@ In order to generate the data split for Table 2 (Full client participation), run
 
 ```
 python3 generate_data.py \
-    --pathological_split\
     --n_tasks 100 \
-    --n_components -1 \
+    --pachinko_allocation_split \
     --alpha 0.4 \
+    --beta 10 \
     --s_frac 0.2 \
     --tr_frac 0.8 \
-    --seed 12345    
+    --test_tasks_frac 0.2 \
+    --seed 12345     
 ```
 
 In order to generate the data split for Table 3 (Unseen clients), run

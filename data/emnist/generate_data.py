@@ -44,6 +44,12 @@ def parse_args():
         action='store_true'
     )
     parser.add_argument(
+        '--pachinko_allocation_split',
+        help='if selected, the dataset will be split using Pachinko allocation,'
+             'see "Adaptive Federated Optimization"__(https://arxiv.org/abs/2003.00295)',
+        action='store_true'
+    )
+    parser.add_argument(
         '--n_shards',
         help='number of shards given to each clients/task; ignored if `--pathological_split` is not used;'
              'default is 2',
@@ -62,6 +68,14 @@ def parse_args():
              'default is 0.2',
         type=float,
         default=0.2)
+    parser.add_argument(
+        '--beta',
+        help='parameter controlling tasks dissimilarity, the smaller beta is the more tasks are dissimilar;'
+             'used with `pachinko_allocation_split`; default is 10.0'
+             'default is 10.0',
+        type=float,
+        default=10.0
+    )
     parser.add_argument(
         '--s_frac',
         help='fraction of the dataset to be used; default: 0.2;',
