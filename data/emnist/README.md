@@ -45,7 +45,7 @@ python3 generate_data.py \
     --n_tasks 100 \
     --pachinko_allocation_split \
     --alpha 0.4 \
-    --beta 10 \
+    --beta 1 \
     --s_frac 0.2 \
     --tr_frac 0.8 \
     --test_tasks_frac 0.2 \
