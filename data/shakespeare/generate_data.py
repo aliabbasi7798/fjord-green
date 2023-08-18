@@ -15,7 +15,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--s_frac',
-        help='fraction of data to be used; default is 1.0',
+        help='fraction of raw_data to be used; default is 1.0',
         type=float,
         default=1.0
     )
@@ -49,9 +49,9 @@ def parse_args():
 
 def train_test_split(raw_text, frac):
     r"""
-    splits role text data into a set of training lines (the first `frac` of lines for the role),
+    splits role text raw_data into a set of training lines (the first `frac` of lines for the role),
      and test lines (the last 1 - `frac`, rounded up to at least one line)
-    :param raw_text: raw text data
+    :param raw_text: raw text raw_data
     :type raw_text: str
     :param frac: training fraction
     return `train_text`, `test_text`

@@ -24,7 +24,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Creates .pkl files for:
 1. list of directories of every image in 'by_class'
 2. list of directories of every image in 'by_write'
-the hierarchal structure of the data is as follows:
+the hierarchal structure of the raw_data is as follows:
 - by_class -> classes -> folders containing images -> images
 - by_write -> folders containing writers -> writer -> types of images -> images
 the directories written into the files are of the form 'raw_data/...'

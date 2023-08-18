@@ -249,7 +249,7 @@ def pathological_non_iid_split(
 ):
     """
     split classification dataset among `n_clients`. The dataset is split as follow:
-        1) sort the data by label
+        1) sort the raw_data by label
         2) divide it into `n_clients * n_classes_per_client` shards, of equal size.
         3) assign each of the `n_clients` with `n_classes_per_client` shards
 

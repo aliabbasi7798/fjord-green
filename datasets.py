@@ -47,7 +47,7 @@ class SubFEMNIST(Dataset):
     """
     Constructs a subset of FEMNIST dataset corresponding to one client;
     Initialized with the path to a `.pt` file;
-    `.pt` file is expected to hold a tuple of tensors (data, targets) storing the images and there corresponding labels.
+    `.pt` file is expected to hold a tuple of tensors (raw_data, targets) storing the images and there corresponding labels.
 
     Attributes
     ----------
@@ -380,7 +380,7 @@ class CharacterDataset(Dataset):
 def get_emnist():
     """
     gets full (both train and test) EMNIST dataset inputs and labels;
-    the dataset should be first downloaded (see data/emnist/README.md)
+    the dataset should be first downloaded (see raw_data/emnist/README.md)
     :return:
         emnist_data, emnist_targets
     """
@@ -403,7 +403,7 @@ def get_emnist():
             download=True,
             train=True
         )
-    #print(emnist_test.targets , emnist_test.data)
+    #print(emnist_test.targets , emnist_test.raw_data)
    # imge , label in emnist_train[0]
     #print(image , label)
    # print(emnist_train[0][0].shape)
@@ -474,7 +474,7 @@ def get_medmnist():
 def get_cifar10():
     """
     gets full (both train and test) CIFAR10 dataset inputs and labels;
-    the dataset should be first downloaded (see data/emnist/README.md)
+    the dataset should be first downloaded (see raw_data/emnist/README.md)
     :return:
         cifar10_data, cifar10_targets
     """
@@ -492,7 +492,7 @@ def get_cifar10():
             root=cifar10_path,
             train=False,
             download=False)
-    #print(torch.tensor(cifar10_test.data))
+    #print(torch.tensor(cifar10_test.raw_data))
     cifar10_data = \
         torch.cat([
             torch.tensor(cifar10_train.data),
@@ -511,7 +511,7 @@ def get_cifar10():
 def get_cifar100():
     """
     gets full (both train and test) CIFAR100 dataset inputs and labels;
-    the dataset should be first downloaded (see data/cifar100/README.md)
+    the dataset should be first downloaded (see raw_data/cifar100/README.md)
     :return:
         cifar100_data, cifar100_targets
     """

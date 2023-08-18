@@ -20,7 +20,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--s_frac',
-        help='fraction of data to be used; default is 0.3',
+        help='fraction of raw_data to be used; default is 0.3',
         type=float,
         default=0.3
     )
@@ -90,7 +90,7 @@ def main():
     os.makedirs(os.path.join(TARGET_PATH, "train"), exist_ok=True)
     os.makedirs(os.path.join(TARGET_PATH, "test"), exist_ok=True)
 
-    print("generating data..")
+    print("generating raw_data..")
     for idx, file_name in enumerate(tqdm(file_names_list)):
         if idx < int(args.train_tasks_frac * n_tasks):
             mode = "train"

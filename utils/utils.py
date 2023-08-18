@@ -25,7 +25,7 @@ def get_data_dir(experiment_name):
     :return: str
 
     """
-    data_dir = os.path.join("data", experiment_name, "all_data")
+    data_dir = os.path.join("raw_data", experiment_name, "all_data")
 
     return data_dir
 
@@ -216,7 +216,7 @@ def get_loaders(type_, root_path, batch_size, is_validation):
      `val_iterator` iterates on the same dataset as `train_iterator`, the difference is only in drop_last
 
     :param type_: type of the dataset;
-    :param root_path: path to the data folder
+    :param root_path: path to the raw_data folder
     :param batch_size:
     :param is_validation: (bool) if `True` validation part is used as test
     :return:
@@ -287,10 +287,10 @@ def get_loader(type_, path, batch_size, train, inputs=None, targets=None):
     constructs a torch.utils.DataLoader object from the given path
 
     :param type_: type of the dataset; possible are `tabular`, `images` and `text`
-    :param path: path to the data file
+    :param path: path to the raw_data file
     :param batch_size:
     :param train: flag indicating if train loader or test loader
-    :param inputs: tensor storing the input data; only used with `cifar10`, `cifar100` and `emnist`; default is None
+    :param inputs: tensor storing the input raw_data; only used with `cifar10`, `cifar100` and `emnist`; default is None
     :param targets: tensor storing the labels; only used with `cifar10`, `cifar100` and `emnist`; default is None
     :return: torch.utils.DataLoader
 

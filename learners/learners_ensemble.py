@@ -95,7 +95,7 @@ class LearnersEnsemble(object):
         perform multiple training epochs, updating each learner in the ensemble
 
         :param iterator:
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :param n_epochs: number of epochs
         :type n_epochs: int
         :param weights: tensor of shape (n_learners, len(iterator)), holding the weight of each sample in iterator
@@ -125,7 +125,7 @@ class LearnersEnsemble(object):
         Evaluate a ensemble of learners on iterator.
 
         :param iterator: yields x, y, indices
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :return: global_loss, global_acc
 
         """
@@ -172,7 +172,7 @@ class LearnersEnsemble(object):
         gathers losses for all sample in iterator for each learner in ensemble
 
         :param iterator:
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :return
             tensor (n_learners, n_samples) with losses of all elements of the iterator.dataset
 
@@ -216,7 +216,7 @@ class LanguageModelingLearnersEnsemble(LearnersEnsemble):
         Evaluate a ensemble of learners on iterator.
 
         :param iterator: yields x, y, indices
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :return: global_loss, global_acc
 
         """

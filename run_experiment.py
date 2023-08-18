@@ -19,13 +19,13 @@ from tensorboardX import SummaryWriter
 
 def init_clients(args_, root_path, logs_root):
     """
-    initialize clients from data folders
+    initialize clients from raw_data folders
     :param args_:
-    :param root_path: path to directory containing data folders
+    :param root_path: path to directory containing raw_data folders
     :param logs_root: path to logs root
     :return: List[Client]
     """
-    print("===> Building data iterators..")
+    print("===> Building raw_data iterators..")
     train_iterators, val_iterators, test_iterators =\
         get_loaders(
             type_=LOADER_TYPE[args_.experiment],
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     # field names
     fields = ['Rounds' , 'Test Accuracy', 'cost']
     rows = []
-    # data rows of csv file
+    # raw_data rows of csv file
     for i in range(len(test_round)):
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
@@ -267,6 +267,6 @@ if __name__ == "__main__":
         # writing the fields
         csvwriter.writerow(fields)
 
-        # writing the data rows
+        # writing the raw_data rows
         csvwriter.writerows(rows)
 

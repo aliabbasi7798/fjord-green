@@ -156,7 +156,7 @@ class Learner:
         perform several optimizer steps on all batches drawn from `iterator`
 
         :param iterator:
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :param weights: tensor with the learners_weights of each sample or None
         :type weights: torch.tensor or None
         :return:
@@ -204,7 +204,7 @@ class Learner:
         gathers losses for all elements of iterator
 
         :param iterator:
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :return
             tensor with losses of all elements of the iterator.dataset
 
@@ -231,7 +231,7 @@ class Learner:
         evaluate learner on `iterator`
 
         :param iterator:
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :return
             global_loss and  global_metric accumulated over the iterator
 
@@ -266,7 +266,7 @@ class Learner:
         :param p: dropout_rate
         :type p : float
         :param iterator:
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :param n_epochs: number of successive batches
         :type n_epochs: int
         :param weights: tensor with the learners_weights of each sample or None
@@ -417,7 +417,7 @@ class LanguageModelingLearner(Learner):
         gathers losses for all elements of iterator
 
         :param iterator:
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :return
             tensor with losses of all elements of the iterator.dataset
 
@@ -441,7 +441,7 @@ class LanguageModelingLearner(Learner):
         evaluate learner on `iterator`
 
         :param iterator:
-        :type iterator: torch.utils.data.DataLoader
+        :type iterator: torch.utils.raw_data.DataLoader
         :return
             global_loss and  global_metric accumulated over the iterator
 

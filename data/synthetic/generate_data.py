@@ -127,7 +127,7 @@ def parse_args():
     )
     parser.add_argument(
         '--dimension',
-        help='data dimension;',
+        help='raw_data dimension;',
         type=int,
         default=150
     )

@@ -107,8 +107,8 @@ def main():
     )
 
     dataset = ConcatDataset([
-         ChestXray('/Users/ali/PycharmProjects/fjord-green/data/Chestxray/chestXray/train', transform=transform),
-     ChestXray('/Users/ali/PycharmProjects/fjord-green/data/Chestxray/chestXray/test', transform=transform)
+         ChestXray('/Users/ali/PycharmProjects/fjord-green/raw_data/Chestxray/chestXray/train', transform=transform),
+     ChestXray('/Users/ali/PycharmProjects/fjord-green/raw_data/Chestxray/chestXray/test', transform=transform)
     ])
     print(len(dataset))
     if args.pathological_split:

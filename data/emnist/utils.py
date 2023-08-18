@@ -120,7 +120,7 @@ def split_dataset_by_labels(dataset, n_classes, n_clients, n_clusters, alpha, fr
 def pathological_non_iid_split(dataset, n_classes, n_clients, n_classes_per_client, frac=1, seed=1234):
     """
     split classification dataset among `n_clients`. The dataset is split as follow:
-        1) sort the data by label
+        1) sort the raw_data by label
         2) divide it into `n_clients * n_classes_per_client` shards, of equal size.
         3) assign each of the `n_clients` with `n_classes_per_client` shards
 
@@ -162,7 +162,7 @@ def pathological_non_iid_split(dataset, n_classes, n_clients, n_classes_per_clie
     for client_id in range(n_clients):
         for shard in tasks_shards[client_id]:
             clients_indices[client_id] += shard
-
+    #print(len(clients_indices) , clients_indices[0] , type(clients_indices))
     return clients_indices
 def pachinko_allocation_split(
         dataset,
@@ -273,3 +273,55 @@ def pachinko_allocation_split(
                         )
 
     return clients_indices
+
+def dirichlet_partition(dataset, clients, alpha):
+        """
+        Partitions the dataset into non-IID shards following a Dirichlet distribution and assigns them to clients,
+        ensuring that each client receives an equal number of samples.
+
+        Args:
+          dataset: The dataset to partition.
+          clients: The number of clients.
+          alpha: The parameter for the Dirichlet distribution.
+
+        Returns:
+          Two dictionaries:
+            client_dict: keys are clients and values are the corresponding data indices.
+            client_labels_dict: keys are clients and values are the corresponding shard labels.
+        """
+
+        # Initialize dictionaries to hold the data indices and labels for each client
+        client_dict = {i: np.array([], dtype='int64') for i in range(clients)}
+        client_labels_dict = {i: [] for i in range(clients)}
+
+        # Get the indices and labels from the dataset
+        idxs = np.arange(len(dataset))
+        data_labels = np.array(dataset.targets)
+
+        # Randomly distribute an equal number of samples to each client
+        np.random.shuffle(idxs)
+        samples_per_client = len(idxs) // clients
+        for i in range(clients):
+            client_dict[i] = idxs[i * samples_per_client:(i + 1) * samples_per_client]
+            client_labels_dict[i] = data_labels[client_dict[i]].tolist()
+
+        # Generate Dirichlet distribution for each client
+        for i in range(clients):
+            client_labels = np.array(client_labels_dict[i])
+            label_counts = np.bincount(client_labels, minlength=10)
+            dirichlet_dist = np.random.dirichlet(alpha * label_counts)
+            multinomial_dist = np.random.multinomial(len(client_dict[i]), dirichlet_dist)
+
+            client_idxs = []
+            for label, count in enumerate(multinomial_dist):
+                label_idxs = np.where(client_labels == label)[0]
+                if count > len(label_idxs):
+                    count = len(label_idxs)
+                label_idxs = np.random.choice(label_idxs, size=count, replace=False)
+                client_idxs += label_idxs.tolist()
+
+            client_idxs = np.array(client_idxs)
+            client_dict[i] = client_idxs
+            client_labels_dict[i] = client_labels[client_idxs].tolist()
+
+        return client_dict, client_labels_dict

@@ -1,6 +1,6 @@
 """
 Converts a list of (writer, [list of (file,class)]) into torch.tensor,
-For each writer, creates a `.pt` file containing `data` and `targets`,
+For each writer, creates a `.pt` file containing `raw_data` and `targets`,
 The resulting file is saved in `intermediate/data_as_tensor_by_writer'
 """
 import os
