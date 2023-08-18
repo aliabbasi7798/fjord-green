@@ -5,7 +5,9 @@ chkpts/
 data/cifar10/raw_data
 data/emnist/raw_data
 data/emnist/all_data
-
+logs_emnist/
+logs_cifar10/
+data/emnist/raw_data
 # Don't track files with these extensioons
 *.ipynb
 *.npy
