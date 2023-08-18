@@ -6,7 +6,7 @@ if __name__ == "__main__":
     y1 = []
     z1 = []
 
-    with open('Non_IID_emnist-E=1_1cluster_fix100_m=1_feq5.csv', 'r') as csvfile:
+    with open('Emnist_E=1_alpha=10_1cluster(m=1,sd=0)_200round_feq5_agg.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
         i=0
         for row in plots:
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     y2 = []
     z2 = []
 
-    with open('Non_IID_emnist-E=1_2cluster(sd=0.32)_fixcarbon15_feq5.csv', 'r') as csvfile:
+    with open('Emnist_E=1_alpha=10_1cluster(m=0.8,sd=0)_200round_feq5_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     y3 = []
     z3 = []
 
-    with open('Non_IID_emnist-E=1_1cluster_fix100_m=0.6_feq5.csv', 'r') as csvfile:
+    with open('Emnist_E=1_alpha=10_1cluster(m=0.6,sd=0)_200round_feq5_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('Non_IID_emnist-E=1_3cluster_fixcarbon15_feq5.csv', 'r') as csvfile:
+    with open('Emnist_E=1_alpha=10_1cluster(m=0.4,sd=0)_200round_feq5_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     y5 = []
     z5 = []
 
-    with open('Non_IID_emnist-E=1_3cluster(sd=0.16)_fixcarbon15_feq5.csv', 'r') as csvfile:
+    with open('Emnist_E=1_alpha=10_1cluster(m=0.2,sd=0)_200round_feq5_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     y6 = []
     z6 = []
 
-    with open('Non_IID_emnist-E=1_2cluster(sd=0.08)_fixcarbon15_feq5.csv', 'r') as csvfile:
+    with open('Emnist_E=1_alpha=1_1cluster(m=1,sd=0)_200round_feq5_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -99,20 +99,20 @@ if __name__ == "__main__":
     # Plot Loss curve
 
     plt.figure()
-    plt.title('Non-IID EMNIST(E=1)')
+    plt.title('IID EMNIST(E=1)_aggressive intensity')
     # Plot Loss curve
 
 
-    plt.plot(x1[0:5], y1[0:5], color='r', label='1 cluster m= 1 , sd=0(FedAvg)')
-    plt.plot(x3[0:12], y3[0:12], color='g', label='1 cluster m= 0.6 , sd=0')
+    plt.plot(z1, y1, color='r', label='1 cluster m= 1 , sd=0')
+    plt.plot(z2, y2, color='k', label='1 cluster m= 0.8 , sd=0')
 
-    plt.plot(x2, y2, color='b', label='2 cluster m= 0.6 , sd=0.32')
-    plt.plot(x6, y6, color='y', label='2 cluster m= 0.6 , sd=0.08')
+    plt.plot(z3, y3, color='g', label='1 cluster m= 0.6 , sd=0')
+    plt.plot(z4, y4, color='y', label='1 cluster m= 0.4 , sd=0')
 
-    plt.plot(x4, y4, color='k', label='3 cluster m= 0.6 , sd=0.32')
-    plt.plot(x5, y5, color='m', label='3 cluster m= 0.6 , sd=0.08')
+    plt.plot(z5, y5, color='b', label='1 cluster m= 0.2 , sd=0')
+    #plt.plot(z6, y6, color='m', label='FedAvg')
 
     plt.legend()
     plt.ylabel('test accuracy')
-    plt.xlabel('Carbon Cost')
-    plt.savefig('save/cluster(E=1)_m_c_4.png')
+    plt.xlabel('Communication round')
+    plt.savefig('save/IID_clusters_mean.png')
