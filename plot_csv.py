@@ -82,7 +82,7 @@ if __name__ == "__main__":
     y6 = []
     z6 = []
 
-    with open('Emnist_E=1_alpha=1_1cluster(m=1,sd=0)_200round_feq5_real.csv', 'r') as csvfile:
+    with open('Emnist_E=1_alpha=10_1cluster(m=1,sd=0)_200round_feq5_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
