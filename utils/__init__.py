@@ -4,3 +4,7 @@ def split_dataset_by_labels():
 
 def pathological_non_iid_split():
     return None
+
+
+def dirichlet_partition():
+    return None

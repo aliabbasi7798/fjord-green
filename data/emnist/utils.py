@@ -103,6 +103,7 @@ def split_dataset_by_labels(dataset, n_classes, n_clients, n_clusters, alpha, fr
 
     for cluster_id in range(n_clusters):
         weights = np.random.dirichlet(alpha=alpha * np.ones(n_clients))
+        print(weights)
         clients_counts[cluster_id] = np.random.multinomial(clusters_sizes[cluster_id], weights)
 
     clients_counts = np.cumsum(clients_counts, axis=1)
@@ -113,7 +114,7 @@ def split_dataset_by_labels(dataset, n_classes, n_clients, n_clusters, alpha, fr
 
         for client_id, indices in enumerate(cluster_split):
             clients_indices[client_id] += indices
-
+    #print(clients_indices)
     return clients_indices
 
 
@@ -164,117 +165,9 @@ def pathological_non_iid_split(dataset, n_classes, n_clients, n_classes_per_clie
             clients_indices[client_id] += shard
     #print(len(clients_indices) , clients_indices[0] , type(clients_indices))
     return clients_indices
-def pachinko_allocation_split(
-        dataset,
-        n_clients,
-        coarse_labels,
-        n_fine_labels,
-        n_coarse_labels,
-        alpha,
-        beta,
-        frac,
-        seed
-):
-    """
-    split classification dataset among `n_clients` using pachinko allocation.
-    This method works for datasets with coarse (super) labels, e.g. cifar-100.
-    The dataset is split as follow:
-        1) Each client  has a symmetric Dirichlet distribution with parameter `alpha` over the coarse labels.
-        2) Each coarse label has a symmetric Dirichlet distribution with parameter `beta` over its fine labels.
-        3) To generate a sample for the client, we first select  a coarse label by drawing from the coarse
-         label multinomial distribution, and then draw a fine label using the coarse-to-fine multinomial
-         distribution. We then randomly draw a sample from CIFAR-100 with that label (without replacement).
-        4) If this exhausts the set of samples with this label, we remove the label from the coarse-to-fine
-         multinomial and re-normalize the multinomial distribution.
 
-    Implementation follows the description in "Adaptive Federated Optimization"__(https://arxiv.org/abs/2003.00295)
 
-    :param dataset:
-    :param coarse_labels:
-    :param n_fine_labels:
-    :param n_coarse_labels:
-    :param n_clients:
-    :param alpha:
-    :param beta:
-    :param frac:
-    :param seed:
-    :return:
-    """
-    rng_seed = (seed if (seed is not None and seed >= 0) else int(time.time()))
-    rng = random.Random(rng_seed)
-    np.random.seed(rng_seed)
-
-    n_samples = int(len(dataset) * frac)
-    selected_indices = rng.sample(list(range(len(dataset))), n_samples)
-    n_samples_by_client = n_samples // n_clients
-
-    # map labels to fine/coarse labels
-    indices_by_fine_labels = {k: list() for k in range(n_fine_labels)}
-    indices_by_coarse_labels = {k: list() for k in range(n_coarse_labels)}
-
-    for idx in selected_indices:
-        _, fine_label = dataset[idx]
-        coarse_label = coarse_labels[fine_label]
-
-        indices_by_fine_labels[fine_label].append(idx)
-        indices_by_coarse_labels[coarse_label].append(idx)
-
-    available_coarse_labels = [ii for ii in range(n_coarse_labels)]
-
-    fine_labels_by_coarse_labels = {k: list() for k in range(n_coarse_labels)}
-    for fine_label, coarse_label in enumerate(coarse_labels):
-        fine_labels_by_coarse_labels[coarse_label].append(fine_label)
-
-    clients_indices = np.zeros(shape=(n_clients, n_samples_by_client), dtype=np.int64)
-
-    for client_idx in range(n_clients):
-        coarse_labels_weights =\
-            np.random.dirichlet(alpha=alpha * np.ones(len(fine_labels_by_coarse_labels)))
-
-        weights_by_coarse_labels = dict()
-        for coarse_label, fine_labels in fine_labels_by_coarse_labels.items():
-            weights_by_coarse_labels[coarse_label] =\
-                np.random.dirichlet(alpha=beta * np.ones(len(fine_labels)))
-
-        for ii in range(n_samples_by_client):
-            coarse_label_idx =\
-                int(np.argmax(np.random.multinomial(1, coarse_labels_weights)))
-
-            coarse_label = available_coarse_labels[coarse_label_idx]
-
-            fine_label_idx =\
-                int(np.argmax(np.random.multinomial(1, weights_by_coarse_labels[coarse_label])))
-
-            fine_label = fine_labels_by_coarse_labels[coarse_label][fine_label_idx]
-
-            sample_idx = rng.choice(list(indices_by_fine_labels[fine_label]))
-            clients_indices[client_idx, ii] = sample_idx
-
-            indices_by_fine_labels[fine_label].remove(sample_idx)
-            indices_by_coarse_labels[coarse_label].remove(sample_idx)
-
-            if not indices_by_fine_labels[fine_label]:
-                fine_labels_by_coarse_labels[coarse_label].remove(fine_label)
-
-                weights_by_coarse_labels[coarse_label] =\
-                    renormalize(
-                        weights_by_coarse_labels[coarse_label],
-                        fine_label_idx
-                    )
-
-                if not indices_by_coarse_labels[coarse_label]:
-                    fine_labels_by_coarse_labels.pop(coarse_label, None)
-                    available_coarse_labels.remove(coarse_label)
-
-                    coarse_labels_weights =\
-                        renormalize(
-                            coarse_labels_weights,
-                            coarse_label_idx
-                        )
-
-    return clients_indices
-
-def dirichlet_partition(dataset, clients, alpha):
+def dirichlet_partition(dataset,n_classes ,clients, alpha):
         """
         Partitions the dataset into non-IID shards following a Dirichlet distribution and assigns them to clients,
         ensuring that each client receives an equal number of samples.
@@ -296,7 +189,7 @@ def dirichlet_partition(dataset, clients, alpha):
 
         # Get the indices and labels from the dataset
         idxs = np.arange(len(dataset))
-        data_labels = np.array(dataset.targets)
+        data_labels = np.array(n_classes)
 
         # Randomly distribute an equal number of samples to each client
         np.random.shuffle(idxs)
@@ -323,5 +216,5 @@ def dirichlet_partition(dataset, clients, alpha):
             client_idxs = np.array(client_idxs)
             client_dict[i] = client_idxs
             client_labels_dict[i] = client_labels[client_idxs].tolist()
-
-        return client_dict, client_labels_dict
+        print(client_dict)
+        return client_dict

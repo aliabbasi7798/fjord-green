@@ -11,7 +11,7 @@ from torch.utils.data import ConcatDataset
 
 from sklearn.model_selection import train_test_split
 
-from utils import split_dataset_by_labels, pathological_non_iid_split
+from utils import split_dataset_by_labels, pathological_non_iid_split , dirichlet_partition
 
 
 # TODO: remove this after new release of torchvision
@@ -45,6 +45,12 @@ def parse_args():
     )
     parser.add_argument(
         '--pachinko_allocation_split',
+        help='if selected, the dataset will be split using Pachinko allocation,'
+             'see "Adaptive Federated Optimization"__(https://arxiv.org/abs/2003.00295)',
+        action='store_true'
+    )
+    parser.add_argument(
+        '--dirichlet_partition',
         help='if selected, the dataset will be split using Pachinko allocation,'
              'see "Adaptive Federated Optimization"__(https://arxiv.org/abs/2003.00295)',
         action='store_true'
@@ -143,6 +149,14 @@ def main():
                 n_classes_per_client=args.n_shards,
                 frac=args.s_frac,
                 seed=args.seed
+            )
+    elif args.dirichlet_partition:
+        clients_indices = \
+            dirichlet_partition(
+                dataset=dataset,
+                n_classes=N_CLASSES,
+                clients=args.n_tasks,
+                alpha=args.alpha,
             )
     else:
         clients_indices = \
