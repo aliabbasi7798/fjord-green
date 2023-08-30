@@ -42,8 +42,6 @@ In order to generate the data split for Table 2 (Full client participation), run
 
 ```
 python3 generate_data.py \
-    --pathological_split\
-    --n_shards 1\
     --n_tasks 100 \
     --alpha 0.01 \
     --s_frac 0.2 \
