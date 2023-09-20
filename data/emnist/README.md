@@ -43,7 +43,7 @@ In order to generate the data split for Table 2 (Full client participation), run
 ```
 python3 generate_data.py \
     --n_tasks 100 \
-    --alpha 0.01 \
+    --alpha 1 \
     --s_frac 0.2 \
     --tr_frac 0.8 \
     --test_tasks_frac 0.2 \
