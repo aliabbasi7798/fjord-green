@@ -115,4 +115,4 @@ if __name__ == "__main__":
     plt.legend()
     plt.ylabel('test accuracy')
     plt.xlabel('Carbon cost')
-    plt.savefig('save/alpha=0.01_3clusters_E=5_carbon.png')
+    plt.savefig('save/final_plot/alpha=0.01_3clusters_E=5_carbon.png')

@@ -83,7 +83,7 @@ Fjord on emnist dataset experiment
     --bz 16\
     --lr 0.1 \
     --lr_scheduler multi_step \
-    --log_freq 1 \
+    --log_freq 2 \
     --device cuda \
     --optimizer sgd \
     --seed 12345 \
