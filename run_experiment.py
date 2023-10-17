@@ -74,7 +74,7 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = 0.2,
+            green = -3,
             energyClient= 65,
             carbonIntensity = random.choice([15, 47 , 155 , 236 , 441 ,895]),
             #carbonIntensity = random.choice([0.01, 0.1 , 1 , 10 , 100 ,1000]),
@@ -257,7 +257,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "final_results/Emnist_E=5_alpha=0.01_1cluster(m=0.2,sd=0)_200round_feq2_real.csv"
+    filename = "final_results/Emnist_E=5_alpha=0.01_2cluster(m=0.6,sd=0.4)_200round_feq2_real_new.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:

@@ -6,7 +6,7 @@ if __name__ == "__main__":
     y1 = []
     z1 = []
 
-    with open('final_results/Emnist_E=1_alpha=0.01_1cluster(m=1,sd=0)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('final_results/Emnist_E=5_alpha=0.01_1cluster(m=1,sd=0)_200round_feq2_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
         i=0
         for row in plots:
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     y2 = []
     z2 = []
 
-    with open('final_results/Emnist_E=1_alpha=0.01_1cluster(m=0.6,sd=0)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('final_results/Emnist_E=5_alpha=0.01_1cluster(m=0.6,sd=0)_200round_feq2_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     y3 = []
     z3 = []
 
-    with open('final_results/Emnist_E=1_alpha=0.01_2cluster(m=0.6,sd=0.4)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('final_results/Emnist_E=5_alpha=0.01_2cluster(m=0.6,sd=0.4)_200round_feq2_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('final_results/Emnist_E=1_alpha=0.01_3cluster(m=0.6,sd=0.32)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('final_results/Emnist_E=5_alpha=0.01_3cluster(m=0.6,sd=0.32)_200round_feq2_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -103,16 +103,16 @@ if __name__ == "__main__":
     # Plot Loss curve
 
 
-    plt.plot(x1[0:51], y1[0:51], color='r', label='1 cluster m= 1, sd=0(FedAvg)')
-    plt.plot(x2[0:96], y2[0:96], color='k', label='1 cluster m= 0.6, sd=0')
+    plt.plot(z1[2:], y1[2:], color='r', label='1 cluster m= 1, sd=0(FedAvg)')
+    plt.plot(z2[2:], y2[2:], color='k', label='1 cluster m= 0.6, sd=0')
 
-    plt.plot(x3, y3, color='g', label='2 cluster m= 0.6, sd=0.4')
-    plt.plot(x4[0:191], y4[0:191], color='y', label='3 cluster m= 0.6, sd=0.32')
+    plt.plot(z3[2:], y3[2:], color='g', label='2 cluster m= 0.6, sd=0.4')
+    plt.plot(z4[2:], y4[2:], color='y', label='3 cluster m= 0.6, sd=0.32')
 
     #plt.plot(x5[0:35], y5[0:35], color='b', label='3 cluster m= 0.6 , sd=0.16')
     #plt.plot(z6, y6, color='m', label='3 cluster m= 0.6 , sd=0.08')
 
     plt.legend()
     plt.ylabel('test accuracy')
-    plt.xlabel('Carbon Cost(kg)')
-    plt.savefig('final_plots/alpha=0.01_clusters_E=1_cost.svg')
+    plt.xlabel('Communication Round')
+    plt.savefig('final_plots/alpha=0.01_clusters_E=5_rounds.svg')
