@@ -74,10 +74,10 @@ def init_clients(args_, root_path, logs_root):
             local_steps=args_.local_steps,
             tune_locally=args_.locally_tune_clients,
             k=args_.k,
-            green = 0.6,
+            green = -3,
             energyClient= 65,
-            #carbonIntensity = random.choice([15, 47 , 155 , 236 , 441 ,895]),
-            carbonIntensity = random.choice([0.01, 0.1 , 1 , 10 , 100 ,1000]),
+            carbonIntensity = random.choice([15, 47 , 155 , 236 , 441 ,895]),
+            #carbonIntensity = random.choice([0.01, 0.1 , 1 , 10 , 100 ,1000]),
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
         # max_cap the server send a F_max subnetwork
@@ -177,7 +177,7 @@ def run_experiment(args_):
     while current_round <= args_.n_rounds:
         if(current_round > args_.n_rounds/2):
             for c in clients:
-                c.green =1
+                c.green = 0.6
         torch.cuda.empty_cache()
         if ( modeProject == 0):
             tr_1, tr_2 ,testa, testr = aggregator.mix()
@@ -260,7 +260,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "new_experiments/Emnist_E=1_alpha=0.01_2cluster(m=0.6,sd=0.2)_200round_feq1_agg.csv"
+    filename = "new_experiments/Emnist_E=1_alpha=0.01_1cluster(s=0.6,0.4 , 0,e=0.6)_200round_feq1_real.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
