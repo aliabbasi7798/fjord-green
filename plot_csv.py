@@ -36,7 +36,7 @@ if __name__ == "__main__":
     y3 = []
     z3 = []
 
-    with open('new_experiments/Emnist_E=1_alpha=0.01_2cluster(m=0.6,sd=0.4)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('new_experiments/Emnist_E=1_alpha=0.01_2cluster(m=0.6, sd=0.4)_200round_feq1_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     y4 = []
     z4 = []
 
-    with open('new_experiments/Emnist_E=1_alpha=0.01_1cluster(m=0.2,sd=0)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('new_experiments/Emnist_E=1_alpha=0.01_3cluster(m=0.6,sd=0.32)_200round_feq1_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     y5 = []
     z5 = []
 
-    with open('new_experiments/Emnist_E=1_alpha=0.01_1cluster(s=0.2,e=1)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('new_experiments/Emnist_E=1_alpha=0.01_1cluster(s=0.6,0.4,2 , 0,e=0.6,0.4,3 )_200round_feq1_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     y6 = []
     z6 = []
 
-    with open('new_experiments/Emnist_E=1_alpha=0.01_1cluster(s=1,e=0.2)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('new_experiments/Emnist_E=1_alpha=0.01_1cluster(s=0.6,0.4 , 0,e=0.6)_200round_feq1_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -103,16 +103,16 @@ if __name__ == "__main__":
     # Plot Loss curve
 
 
-    plt.plot(z1, y1, color='r', label='1 cluster m= 1, sd=0(FedAvg)' , linewidth=0.7)
-    plt.plot(z2, y2, color='k', label='1 cluster m= 0.6, sd=0', linewidth=0.7)
+    #plt.plot(x1, y1, color='r', label='1 cluster m= 1, sd=0(FedAvg)' , linewidth=0.7)
+    #plt.plot(z2, y2, color='k', label='1 cluster m= 0.6, sd=0', linewidth=0.7)
 
-    plt.plot(z3, y3, color='g', label='2 clusters m= 0.6, sd=0.4', linewidth=0.7)
-    #plt.plot(z4, y4, color='y', label='1 clusters m= 0.2, sd=0', linewidth=0.7)
+    plt.plot(x3, y3, color='g', label='2 clusters m= 0.6, sd=0.4', linewidth=0.7)
+    plt.plot(x4, y4, color='r', label='3 clusters m= 0.6, sd=0.32', linewidth=0.7)
 
-    plt.plot(x5, y5, color='b', label='1 clusters dynamic s=0.6, e=0.6,0.4', linewidth=0.7)
-    plt.plot(x6, y6, color='m', label='1 clusters dynamic s=1, e=0.2', linewidth=0.7)
+    plt.plot(x5, y5, color='b', label='clusters dynamic s=0.6,0.4,2, e=0.6,0.32,3', linewidth=0.7)
+    plt.plot(x6, y6, color='y', label='1 clusters dynamic s=0.6,0.4, e=0.6', linewidth=0.7)
 
     plt.legend()
     plt.ylabel('test accuracy')
     plt.xlabel('Carbon cost')
-    plt.savefig('final_plots/alpha=0.01_dynamic1_E=1_cost.svg')
+    plt.savefig('final_plots/alpha=0.01_dynamic3_E=1_cost.svg')

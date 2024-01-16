@@ -175,9 +175,9 @@ def run_experiment(args_):
     modeProject = 1
 
     while current_round <= args_.n_rounds:
-        if(current_round > args_.n_rounds/2):
-            for c in clients:
-                c.green = 0.6
+        #if(current_round > args_.n_rounds/2):
+        #    for c in clients:
+         #       c.green = -3
         torch.cuda.empty_cache()
         if ( modeProject == 0):
             tr_1, tr_2 ,testa, testr = aggregator.mix()
@@ -260,7 +260,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "new_experiments/Emnist_E=1_alpha=0.01_1cluster(s=0.6,0.4 , 0,e=0.6)_200round_feq1_real.csv"
+    filename = "new_experiments/Emnist_E=1_alpha=0.01_2cluster(m=0.6, sd=0.4)_200round_feq1_real.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
