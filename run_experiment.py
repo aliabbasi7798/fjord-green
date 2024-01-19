@@ -9,6 +9,8 @@ This file can also be imported as a module and contains the following function:
 
     * run_experiment - runs one experiments given its arguments
 """
+import random
+
 import Carbon
 from utils.utils import *
 from utils.constants import *
@@ -76,7 +78,7 @@ def init_clients(args_, root_path, logs_root):
             k=args_.k,
             green = -3,
             energyClient= 65,
-            carbonIntensity = random.choice([15, 47 , 155 , 236 , 441 ,895]),
+            carbonIntensity = 0,
             #carbonIntensity = random.choice([0.01, 0.1 , 1 , 10 , 100 ,1000]),
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
@@ -104,12 +106,22 @@ def run_experiment(args_):
         root_path=os.path.join(data_dir, "train"),
         logs_root=os.path.join(logs_root, "train")
     )
-    s=0
+
+    modearr = []
+    intensityCountry = [15, 47, 155, 236, 441, 895]
+    for nummode in range(len(clients) % len(intensityCountry)):
+        modearr.append(random.choice(intensityCountry))
+
+    arrintesity = [15, 47, 155, 236, 441, 895] * int(len(clients) / len(intensityCountry)) + modearr
+    random.shuffle(arrintesity)
+    sumscale=0
+    numclient = 0
     for c in clients:
+        c.carbonIntensity = arrintesity[numclient]
         print(c.selectgreen_p())
-        #print(c.energyClient)
-        s = s+c.selectgreen_p()
-    print(s/len(clients))
+        sumscale = sumscale+c.selectgreen_p()
+        numclient= numclient +1
+    print(sumscale/len(clients))
     print("==> Test Clients initialization..")
     test_clients = init_clients(
         args_,
@@ -260,7 +272,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "new_experiments/Emnist_E=1_alpha=0.01_2cluster(m=0.6, sd=0.4)_200round_feq1_real.csv"
+    filename = "new_experiments/Emnist_E=1_alpha=0.01_1cluster(m=1)_200round_feq1_real_1.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
