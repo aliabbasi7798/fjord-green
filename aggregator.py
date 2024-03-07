@@ -269,6 +269,9 @@ class Aggregator(ABC):
         sample a list of clients without repetition
 
         """
+        print(self.n_clients_per_round)
+        print(max(1, int(self.sampling_rate * self.n_clients)))
+        self.n_clients_per_round = max(1, int(self.sampling_rate * self.n_clients))
         if self.sample_with_replacement:
             self.sampled_clients = \
                 self.rng.choices(
@@ -350,6 +353,7 @@ class FjordAggregator(Aggregator):
     def mix(self):
         tr_acc, tr_round, test_acc, test_round = [], [], [], []
         self.sample_clients()
+        print(self.sampling_rate)
         #print(self.sample_clients)
         timeArr =[]
         pArr=[]
@@ -363,12 +367,13 @@ class FjordAggregator(Aggregator):
             client.step()
             end = time.time()
             timeArr.append(end-start)
-        #print(ic)
+        print("new_CS")
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
             fjord_average_learners(learners, learner, weights=self.clients_weights)
 
         # assign the updated model to all clients
+        print("old_CS")
         self.update_clients()
 
         self.c_round += 1

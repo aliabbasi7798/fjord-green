@@ -67,7 +67,7 @@ if __name__ == "__main__":
     y5 = []
     z5 = []
 
-    with open('BalanceExperiment/Emnist_E=1_alpha=0.01_dcluster(2cluster-sd varaince)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('BalanceExperiment/Emnist_E=1_alpha=0.01_dcluster(s=2(0.6,0.4) - e=0.6)_200round_feq1_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     y6 = []
     z6 = []
 
-    with open('BalanceExperiment/Emnist_E=1_alpha=0.01_dcluster(2cluster-sd varaince-decreasing)_200round_feq1_real.csv', 'r') as csvfile:
+    with open('BalanceExperiment/Emnist_E=1_alpha=0.01_dcluster(s=0.6 - e=2(0.6,0.4))_200round_feq1_real.csv', 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
 
         i = 0
@@ -109,10 +109,10 @@ if __name__ == "__main__":
     plt.plot(z3, y3, color='g', label='2 clusters m= 0.6, sd=0.4', linewidth=0.7)
     #plt.plot(z4, y4, color='y', label='3 clusters m= 0.6, sd=0.32', linewidth=0.7)
 
-    plt.plot(z5, y5, color='b', label='clusters dynamic2', linewidth=0.7)
-    #plt.plot(z6, y6, color='y', label='clusters dynamic2', linewidth=0.7)
+    #plt.plot(z5, y5, color='b', label='clusters dynamic-scenario1', linewidth=0.7)
+    plt.plot(z6, y6, color='y', label='clusters dynamic-scenario2', linewidth=0.7)
 
     plt.legend()
     plt.ylabel('test accuracy')
     plt.xlabel('Communication Rounds')
-    plt.savefig('final_plots/alpha=0.01_dynamicincreasesd_E=1_round.svg')
+    plt.savefig('final_plots/alpha=0.01_dynamic_s2_E=1_round.svg')

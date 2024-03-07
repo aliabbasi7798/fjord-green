@@ -191,8 +191,10 @@ def run_experiment(args_):
         if(current_round > 100):
             for c in clients:
                 c.green = -3
-
-
+        if(current_round == 0):
+            aggregator.sampling_rate = 1
+        else:
+            aggregator.sampling_rate = 0.1
         torch.cuda.empty_cache()
         if ( modeProject == 0):
             tr_1, tr_2 ,testa, testr = aggregator.mix()
@@ -222,7 +224,7 @@ def run_experiment(args_):
             print(p)
 
             if(totalEnergy < 1000):
-                comuEng, compEng = Carbon.carbonEmission(8 , 41 , 10 , 4 , 10 , 8, 1, 2000 , 6000 , 2 , p , energyC , carbon)
+                comuEng, compEng = Carbon.carbonEmission(8 , 41 , 10 , 4 , 10 , aggregator.n_clients_per_round, 1, 2000 , 6000 , 2 , p , energyC , carbon)
                 totalcommunicationEnergy += comuEng
                 totalcomputationEnergy += compEng
 
@@ -275,7 +277,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "BalanceExperiment/Emnist_E=1_alpha=0.01_dcluster(s=0.6 - e=2(0.6,0.4))_200round_feq1_real.csv"
+    filename = "BalanceExperiment/Emnist_E=1_alpha=0.01_feq1_real_testclientselection.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
