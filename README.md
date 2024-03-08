@@ -86,7 +86,7 @@ Fjord on emnist dataset experiment
     --log_freq 1 \
     --device cuda \
     --optimizer sgd \
-    --seed 45321 \
+    --seed 45231 \
     --logs_root ./logs_emnist \
     --verbose 1\
     --k 5\

@@ -198,6 +198,7 @@ def run_experiment(args_):
         torch.cuda.empty_cache()
         if ( modeProject == 0):
             tr_1, tr_2 ,testa, testr = aggregator.mix()
+            print("WOOO")
             if (len(testa) > 0):
                 acc = testa[0]
                 tr_acc.append(tr_1[0])

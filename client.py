@@ -214,6 +214,7 @@ class Client(object):
 
     def write_logs(self):
         #print("log1c")
+        print(self.carbonIntensity)
         if self.tune_locally:
             self.update_tuned_learners()
 
@@ -224,13 +225,13 @@ class Client(object):
         else:
             train_loss, train_acc = self.learners_ensemble.evaluate_iterator(self.val_iterator)
             test_loss, test_acc = self.learners_ensemble.evaluate_iterator(self.test_iterator)
-        #print("log2c")
-        #print(train_loss)
+        print("log2c")
+        print(train_loss , train_acc , test_loss , test_acc)
         self.logger.add_scalar("Train/Loss", train_loss, self.counter)
         self.logger.add_scalar("Train/Metric", train_acc, self.counter)
         self.logger.add_scalar("Test/Loss", test_loss, self.counter)
         self.logger.add_scalar("Test/Metric", test_acc, self.counter)
-        #print("log3c")
+        print("log3c")
 
         return train_loss, train_acc, test_loss, test_acc
 

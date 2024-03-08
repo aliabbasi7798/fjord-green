@@ -152,19 +152,23 @@ class LearnersEnsemble(object):
                     if self.is_binary_classification:
                         y_pred += self.learners_weights[learner_id] * torch.sigmoid(learner.model(x))
                     else:
+                        #print(learner.model(x))
                         y_pred += self.learners_weights[learner_id] * F.softmax(learner.model(x), dim=1)
 
                 y_pred = torch.clamp(y_pred, min=0., max=1.)
-
+                #print("hi")
+                #print(y_pred)
                 if self.is_binary_classification:
                     y = y.type(torch.float32).unsqueeze(1)
                     global_loss += criterion(y_pred, y).sum().item()
                     y_pred = torch.logit(y_pred, eps=1e-10)
                 else:
+                    #print("hi")
+                    #print(criterion(torch.log(y_pred), y).sum().item())
                     global_loss += criterion(torch.log(y_pred), y).sum().item()
 
                 global_metric += self.metric(y_pred, y).item()
-            #print(n_samples)
+            print(n_samples , global_loss , global_metric)
             return global_loss / n_samples, global_metric / n_samples
 
     def gather_losses(self, iterator):
