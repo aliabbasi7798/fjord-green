@@ -192,7 +192,7 @@ def run_experiment(args_):
             for c in clients:
                 c.green = -3
         if(current_round == 0):
-            aggregator.sampling_rate = 1
+            aggregator.sampling_rate = 0.99
         else:
             aggregator.sampling_rate = 0.1
         torch.cuda.empty_cache()

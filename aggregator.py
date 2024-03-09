@@ -167,9 +167,9 @@ class Aggregator(ABC):
             total_n_test_samples = 0
 
             for client_id, client in enumerate(clients):
-                print("loggg")
+
                 train_loss, train_acc, test_loss, test_acc = client.write_logs()
-                print("log1")
+
                 # print(f"train_loss {train_loss}, train_acc {train_acc}, test_loss {test_loss}, test_acc {test_acc}")
                 if self.verbose > 1:
                     print("*" * 30)
@@ -359,6 +359,7 @@ class FjordAggregator(Aggregator):
         pArr=[]
         energyC = []
         carbonIntensity =[]
+        modellayer = []
         for client in self.sampled_clients:
             pArr.append(client.selectgreen_p())
             energyC.append(client.energyClient)
@@ -367,9 +368,13 @@ class FjordAggregator(Aggregator):
             client.step()
             end = time.time()
             timeArr.append(end-start)
+
+
+
         print("new_CS")
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
+            print(client.learners_ensemble[learner_id], learner , learner.model)
             fjord_average_learners(learners, learner, weights=self.clients_weights)
 
         # assign the updated model to all clients
