@@ -278,7 +278,7 @@ if __name__ == "__main__":
         rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
 
     # name of csv file
-    filename = "BalanceExperiment/Emnist_E=1_alpha=0.01_feq1_real_testclientselection.csv"
+    filename = "BalanceExperiment/Emnist_E=1_alpha=0.01_feq1_real_test_clientselection.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:

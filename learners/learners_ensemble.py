@@ -168,7 +168,7 @@ class LearnersEnsemble(object):
                     global_loss += criterion(torch.log(y_pred), y).sum().item()
 
                 global_metric += self.metric(y_pred, y).item()
-            print(n_samples , global_loss , global_metric)
+            #print(n_samples , global_loss , global_metric)
             return global_loss / n_samples, global_metric / n_samples
 
     def gather_losses(self, iterator):

@@ -269,8 +269,8 @@ class Aggregator(ABC):
         sample a list of clients without repetition
 
         """
-        print(self.n_clients_per_round)
-        print(max(1, int(self.sampling_rate * self.n_clients)))
+        #print(self.n_clients_per_round)
+        #print(max(1, int(self.sampling_rate * self.n_clients)))
         self.n_clients_per_round = max(1, int(self.sampling_rate * self.n_clients))
         if self.sample_with_replacement:
             self.sampled_clients = \
@@ -353,7 +353,7 @@ class FjordAggregator(Aggregator):
     def mix(self):
         tr_acc, tr_round, test_acc, test_round = [], [], [], []
         self.sample_clients()
-        print(self.sampling_rate)
+        #print(self.sampling_rate)
         #print(self.sample_clients)
         timeArr =[]
         pArr=[]
@@ -368,25 +368,28 @@ class FjordAggregator(Aggregator):
             client.step()
             end = time.time()
             timeArr.append(end-start)
+        for learner_id, learner in enumerate(self.global_learners_ensemble):
+            for client in self.clients:
+                temp_model = client.learners_ensemble[learner_id]  # Assuming this gets the model
+                print(temp_model)
+                print(learner.model.state_dict())
 
-
-
-        print("new_CS")
+        #print("new_CS")
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
             print(client.learners_ensemble[learner_id], learner , learner.model)
             fjord_average_learners(learners, learner, weights=self.clients_weights)
 
         # assign the updated model to all clients
-        print("old_CS")
+        #print("old_CS")
         self.update_clients()
 
         self.c_round += 1
         tr_acc, tr_round, test_acc, test_round= [], [] , [] , []
-        print("helloold")
+        #print("helloold")
         if self.c_round % self.log_freq == 0:
             tr_acc, tr_round , test_acc, test_round = self.write_logs()
-        print("helloold")
+        #print("helloold")
         return tr_acc, tr_round ,test_acc, test_round, timeArr , pArr , energyC , carbonIntensity
     def update_clients(self):
        # print("hellonew")
