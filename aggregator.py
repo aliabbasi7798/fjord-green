@@ -368,16 +368,40 @@ class FjordAggregator(Aggregator):
             client.step()
             end = time.time()
             timeArr.append(end-start)
+        weights_arr=[]
         for learner_id, learner in enumerate(self.global_learners_ensemble):
+            print("leatrner_id" , learner_id , "learner" ,learner)
             for client in self.clients:
-                temp_model = client.learners_ensemble[learner_id]  # Assuming this gets the model
-                print(temp_model)
-                print(learner.model.state_dict())
+                temp_learner = client.learners_ensemble[learner_id]  # Assuming this gets the model
+                #print(temp_model)
+                #print(client.counter,learner.model.state_dict())
+                state_dict = temp_learner.model.state_dict()
 
-        #print("new_CS")
+                # Accessing the weights of the 'fc1' layer
+                fc1_weight = state_dict['fc1.weight']
+                list_weights = list(np.array(torch.flatten(fc1_weight).detach().cpu().numpy()))
+                weights_arr.append(list_weights)
+                # Printing the 'fc1' layer's weights
+                #print("fc1 weights:", list_weights)
+
+                #print(client.counter)
+        print("weights_arrr: " , len(weights_arr))
+        similarity_matrix = [[0 for _ in range(len(self.clients))] for _ in range(len(self.clients))]
+
+        for i in range(len(self.clients)):
+            for j in range(len(self.clients)):
+                if i > j:
+                    similarity_score = np.vdot(weights_arr[i], weights_arr[j])
+                    similarity_matrix[i][j] = similarity_score
+                    similarity_matrix[j][i] = similarity_score
+                elif i == j:
+                    similarity_matrix[i][j] = 1
+
+        print("Similarity matrix:", similarity_matrix)
+
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
-            print(client.learners_ensemble[learner_id], learner , learner.model)
+            #print(client.learners_ensemble[learner_id], learner , learner.model)
             fjord_average_learners(learners, learner, weights=self.clients_weights)
 
         # assign the updated model to all clients
