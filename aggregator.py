@@ -390,12 +390,11 @@ class FjordAggregator(Aggregator):
 
         for i in range(len(self.clients)):
             for j in range(len(self.clients)):
-                if i > j:
-                    similarity_score = np.vdot(weights_arr[i], weights_arr[j])
+                if i >= j:
+                    similarity_score = cosine_similarity(weights_arr[i], weights_arr[j])
                     similarity_matrix[i][j] = similarity_score
                     similarity_matrix[j][i] = similarity_score
-                elif i == j:
-                    similarity_matrix[i][j] = 1
+
 
         print("Similarity matrix:", similarity_matrix)
 
@@ -923,3 +922,8 @@ class DecentralizedAggregator(Aggregator):
         if self.c_round % self.log_freq == 0:
             tr_acc, tr_round , test_acc, test_round = self.write_logs()
         return tr_acc, tr_round , test_acc, test_round
+def cosine_similarity(A, B):
+    dot_product = np.dot(A, B)
+    norm_a = np.linalg.norm(A)
+    norm_b = np.linalg.norm(B)
+    return dot_product / (norm_a * norm_b)
