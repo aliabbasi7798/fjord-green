@@ -54,6 +54,7 @@ class Client(object):
             green,
             energyClient,
             carbonIntensity,
+            clientID,
             tune_locally=False,
             seed=None
 
@@ -91,6 +92,7 @@ class Client(object):
         self.counter = 0
         self.logger = logger
         self.__p = self.selectgreen_p()
+        self.clientID = clientID
     def selectgreen_p(self):
         temp = self.carbonIntensity * self.energyClient
         if(self. green == 0):

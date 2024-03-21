@@ -334,7 +334,8 @@ def get_client(
         k,
         green,
         energyClient,
-        carbonIntensity
+        carbonIntensity,
+        clientID
 ):
     """
 
@@ -363,7 +364,8 @@ def get_client(
             k = k,
             green = green,
             energyClient = energyClient,
-            carbonIntensity=carbonIntensity
+            carbonIntensity=carbonIntensity,
+            clientID=clientID
         )
     elif client_type == "AFL":
         return AgnosticFLClient(
@@ -398,7 +400,8 @@ def get_client(
             k=k,
             green= green,
             energyClient = energyClient,
-            carbonIntensity= carbonIntensity
+            carbonIntensity= carbonIntensity,
+            clientID=clientID
         )
 
 

@@ -351,7 +351,8 @@ class FjordAggregator(Aggregator):
     def mix(self):
         tr_acc, tr_round, test_acc, test_round = [], [], [], []
         self.sample_clients()
-        print(self.sampled_clients)
+        for client in self.sampled_clients:
+            print(client.clientID)
         timeArr =[]
         pArr=[]
         energyC = []
@@ -370,6 +371,7 @@ class FjordAggregator(Aggregator):
         clusters = []
         if self.sampling_rate > 0.5:
             weights_arr=[]
+            client_id =[]
             for learner_id, learner in enumerate(self.global_learners_ensemble):
                 print("leatrner_id" , learner_id , "learner" ,learner)
                 for client in self.clients:
@@ -380,6 +382,7 @@ class FjordAggregator(Aggregator):
                     fc1_weight = state_dict['fc1.weight']
                     list_weights = list(np.array(torch.flatten(fc1_weight).detach().cpu().numpy()))
                     weights_arr.append(list_weights)
+                    client_id.append(client.clientID)
             print("weights_arrr: " , len(weights_arr))
             similarity_matrix = [[0 for _ in range(len(self.clients))] for _ in range(len(self.clients))]
 

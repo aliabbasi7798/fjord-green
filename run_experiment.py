@@ -79,6 +79,7 @@ def init_clients(args_, root_path, logs_root):
             green = 0.6,
             energyClient= 65,
             carbonIntensity = 0,
+            clientID = 0,
             #carbonIntensity = random.choice([0.01, 0.1 , 1 , 10 , 100 ,1000]),
         )
         # here we send value k to the client, and a function attributes a random maximum capability, based on this
@@ -121,6 +122,7 @@ def run_experiment(args_):
         print(c.selectgreen_p())
         sumscale = sumscale+c.selectgreen_p()
         numclient= numclient +1
+        c.clientID = numclient
     print(sumscale/len(clients))
     print("==> Test Clients initialization..")
     test_clients = init_clients(
@@ -267,14 +269,14 @@ if __name__ == "__main__":
     import csv
     k = 0
     # field names
-    fields = ['Rounds' , 'Test Accuracy', 'cost']
+    fields = ['Rounds', 'Test Accuracy', 'cost']
     rows = []
     # raw_data rows of csv file
     for i in range(len(test_round)):
-        rows.append([test_round[i] , test_acc[i] , carbonEmmited[i]])
+        rows.append([test_round[i], test_acc[i], carbonEmmited[i]])
 
     # name of csv file
-    filename = "BalanceExperiment/Emnist_E=1_alpha=0.01_feq1_real_test_clientselection.csv"
+    filename = "BalanceExperiment/Emnist_E=1_alpha=0.01_feq1_real_test_client_selection.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
