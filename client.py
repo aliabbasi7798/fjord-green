@@ -65,7 +65,6 @@ class Client(object):
         self.n_learners = len(self.learners_ensemble)
         self.tune_locally = tune_locally
         self.max_cap, self.possible_p_list = functions.select_max_cap(k=k)  #sample  a max_capability of client and a list of possible dropout rates
-        #print("p list" , self.possible_p_list)
         self.green = green
         self.energyClient = energyClient
         self.carbonIntensity = carbonIntensity
@@ -163,10 +162,8 @@ class Client(object):
         else:
             return self.green
     def select_p(self):
-        #print ("green"  , self.possible_p_list)
-       # self.__p = self.rng.choice(self.possible_p_list)
+
         self.__p = self.selectgreen_p()
-        #print("p" , self.__p)
     def get_next_batch(self):
         try:
             batch = next(self.train_loader)
@@ -213,8 +210,6 @@ class Client(object):
         return client_updates
 
     def write_logs(self):
-        #print("log1c")
-        print(self.carbonIntensity)
         if self.tune_locally:
             self.update_tuned_learners()
 
@@ -225,13 +220,10 @@ class Client(object):
         else:
             train_loss, train_acc = self.learners_ensemble.evaluate_iterator(self.val_iterator)
             test_loss, test_acc = self.learners_ensemble.evaluate_iterator(self.test_iterator)
-        #print("log2c")
-        #print(train_loss , train_acc , test_loss , test_acc)
         self.logger.add_scalar("Train/Loss", train_loss, self.counter)
         self.logger.add_scalar("Train/Metric", train_acc, self.counter)
         self.logger.add_scalar("Test/Loss", test_loss, self.counter)
         self.logger.add_scalar("Test/Metric", test_acc, self.counter)
-        #print("log3c")
 
         return train_loss, train_acc, test_loss, test_acc
 

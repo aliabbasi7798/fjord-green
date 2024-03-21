@@ -269,8 +269,6 @@ class Aggregator(ABC):
         sample a list of clients without repetition
 
         """
-        #print(self.n_clients_per_round)
-        #print(max(1, int(self.sampling_rate * self.n_clients)))
         self.n_clients_per_round = max(1, int(self.sampling_rate * self.n_clients))
         if self.sample_with_replacement:
             self.sampled_clients = \
@@ -353,8 +351,7 @@ class FjordAggregator(Aggregator):
     def mix(self):
         tr_acc, tr_round, test_acc, test_round = [], [], [], []
         self.sample_clients()
-        #print(self.sampling_rate)
-        #print(self.sample_clients)
+        print(self.sampled_clients)
         timeArr =[]
         pArr=[]
         energyC = []
@@ -368,64 +365,49 @@ class FjordAggregator(Aggregator):
             client.step()
             end = time.time()
             timeArr.append(end-start)
-        weights_arr=[]
-        for learner_id, learner in enumerate(self.global_learners_ensemble):
-            print("leatrner_id" , learner_id , "learner" ,learner)
-            for client in self.clients:
-                temp_learner = client.learners_ensemble[learner_id]  # Assuming this gets the model
-                #print(temp_model)
-                #print(client.counter,learner.model.state_dict())
-                state_dict = temp_learner.model.state_dict()
 
-                # Accessing the weights of the 'fc1' layer
-                fc1_weight = state_dict['fc1.weight']
-                list_weights = list(np.array(torch.flatten(fc1_weight).detach().cpu().numpy()))
-                weights_arr.append(list_weights)
-                # Printing the 'fc1' layer's weights
-                #print("fc1 weights:", list_weights)
+        print(self.sampling_rate)
+        clusters = []
+        if self.sampling_rate > 0.5:
+            weights_arr=[]
+            for learner_id, learner in enumerate(self.global_learners_ensemble):
+                print("leatrner_id" , learner_id , "learner" ,learner)
+                for client in self.clients:
+                    temp_learner = client.learners_ensemble[learner_id]  # Assuming this gets the model
+                    state_dict = temp_learner.model.state_dict()
 
-                #print(client.counter)
-        print("weights_arrr: " , len(weights_arr))
-        similarity_matrix = [[0 for _ in range(len(self.clients))] for _ in range(len(self.clients))]
+                    # Accessing the weights of the 'fc1' layer
+                    fc1_weight = state_dict['fc1.weight']
+                    list_weights = list(np.array(torch.flatten(fc1_weight).detach().cpu().numpy()))
+                    weights_arr.append(list_weights)
+            print("weights_arrr: " , len(weights_arr))
+            similarity_matrix = [[0 for _ in range(len(self.clients))] for _ in range(len(self.clients))]
 
-        for i in range(len(self.clients)):
-            for j in range(len(self.clients)):
-                if i >= j:
-                    similarity_score = cosine_similarity(weights_arr[i], weights_arr[j])
-                    similarity_matrix[i][j] = similarity_score
-                    similarity_matrix[j][i] = similarity_score
+            for i in range(len(self.clients)):
+                for j in range(len(self.clients)):
+                    if i >= j:
+                        similarity_score = cosine_similarity(weights_arr[i], weights_arr[j])
+                        similarity_matrix[i][j] = similarity_score
+                        similarity_matrix[j][i] = similarity_score
 
-
-        print("Similarity matrix:", similarity_matrix)
+            cluster_matrix = np.array(similarity_matrix)
+            clusters = perform_kmeans_clustering(cluster_matrix, 10)
+            print(clusters)
 
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
-            #print(client.learners_ensemble[learner_id], learner , learner.model)
             fjord_average_learners(learners, learner, weights=self.clients_weights)
-
-        # assign the updated model to all clients
-        #print("old_CS")
         self.update_clients()
 
         self.c_round += 1
         tr_acc, tr_round, test_acc, test_round= [], [] , [] , []
-        #print("helloold")
         if self.c_round % self.log_freq == 0:
             tr_acc, tr_round , test_acc, test_round = self.write_logs()
-        #print("helloold")
-        return tr_acc, tr_round ,test_acc, test_round, timeArr , pArr , energyC , carbonIntensity
+        return tr_acc, tr_round ,test_acc, test_round, timeArr , pArr , energyC , carbonIntensity , clusters
     def update_clients(self):
-       # print("hellonew")
         for client in self.clients:
-            #print(client.selectgreen_p())
             for learner_id, learner in enumerate(client.learners_ensemble):
                 copy_model(learner.model, self.global_learners_ensemble[learner_id].model)
-               # print(learner.model.p)
-               # print(client.green , "number")
-              #  total_params = sum(
-               #     param.numel() for param in learner.model.parameters()
-               # )
-              #  print('Total number of parameters:', total_params)
                 if callable(getattr(learner.optimizer, "set_initial_params", None)):
                     learner.optimizer.set_initial_params(
                         self.global_learners_ensemble[learner_id].model.parameters()
@@ -927,3 +909,34 @@ def cosine_similarity(A, B):
     norm_a = np.linalg.norm(A)
     norm_b = np.linalg.norm(B)
     return dot_product / (norm_a * norm_b)
+
+
+from sklearn.metrics import pairwise_distances
+from sklearn.manifold import MDS
+from sklearn.cluster import KMeans
+import numpy as np
+
+def perform_kmeans_clustering(similarity_matrix, n_clusters, n_components=2):
+    """
+    Perform k-means clustering on data represented by a similarity matrix.
+
+    Parameters:
+    - similarity_matrix: A 2D numpy array where each element is the similarity between two data points.
+    - n_clusters: The number of clusters to form.
+    - n_components: The number of dimensions to reduce the data to using MDS before clustering.
+
+    Returns:
+    - clusters: An array of cluster assignments.
+    """
+    # Convert similarity to distance (assuming similarity range is [0, 1])
+    distance_matrix = 1 - similarity_matrix
+
+    # Use MDS to find a feature space representation
+    mds = MDS(n_components=n_components, dissimilarity="precomputed", random_state=42)
+    features = mds.fit_transform(distance_matrix)
+
+    # Apply k-means clustering
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+    clusters = kmeans.fit_predict(features)
+
+    return clusters

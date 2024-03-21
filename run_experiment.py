@@ -198,7 +198,6 @@ def run_experiment(args_):
         torch.cuda.empty_cache()
         if ( modeProject == 0):
             tr_1, tr_2 ,testa, testr = aggregator.mix()
-            print("WOOO")
             if (len(testa) > 0):
                 acc = testa[0]
                 tr_acc.append(tr_1[0])
@@ -212,7 +211,8 @@ def run_experiment(args_):
 
         if (modeProject == 1):
             print(current_round)
-            tr_1, tr_2, testa, testr, time, p, energyC, carbon = aggregator.mix()
+            tr_1, tr_2, testa, testr, time, p, energyC, carbon , clusters = aggregator.mix()
+            print(clusters)
             if(len(testa) > 0):
                 acc = testa[0]
                 tr_acc.append(tr_1[0])
@@ -236,24 +236,20 @@ def run_experiment(args_):
                 break
 
 
-        #print(1)
             if aggregator.c_round != current_round:
                 pbar.update(1)
                 current_round = aggregator.c_round
-        #print(2)
     if (modeProject == 1) :
         totalEnergy = (totalcomputationEnergy + totalcommunicationEnergy)/(3.6*1000000)
         print(totalEnergy , totalcommunicationEnergy , totalcomputationEnergy)
         print(carbon)
     if "save_path" in args_:
         save_root = os.path.join(args_.save_path)
-        #print(3)
         os.makedirs(save_root, exist_ok=True)
         aggregator.save_state(save_root)
     return tr_acc, tr_round, test_acc, test_round, carbonEmmited
 
 if __name__ == "__main__":
-    print("hello")
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
