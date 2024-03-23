@@ -351,8 +351,10 @@ class FjordAggregator(Aggregator):
     def mix(self):
         tr_acc, tr_round, test_acc, test_round = [], [], [], []
         self.sample_clients()
+        id_test = []
         for client in self.sampled_clients:
-            print(client.clientID)
+            id_test.append(client.clientID)
+        print(id_test)
         timeArr =[]
         pArr=[]
         energyC = []
@@ -371,10 +373,10 @@ class FjordAggregator(Aggregator):
         clusters = []
         if self.sampling_rate > 0.5:
             weights_arr=[]
-            client_id =[]
+            clientid =[]
             for learner_id, learner in enumerate(self.global_learners_ensemble):
-                print("leatrner_id" , learner_id , "learner" ,learner)
                 for client in self.clients:
+                    clientid.append(client.clientID)
                     temp_learner = client.learners_ensemble[learner_id]  # Assuming this gets the model
                     state_dict = temp_learner.model.state_dict()
 
@@ -382,7 +384,7 @@ class FjordAggregator(Aggregator):
                     fc1_weight = state_dict['fc1.weight']
                     list_weights = list(np.array(torch.flatten(fc1_weight).detach().cpu().numpy()))
                     weights_arr.append(list_weights)
-                    client_id.append(client.clientID)
+
             print("weights_arrr: " , len(weights_arr))
             similarity_matrix = [[0 for _ in range(len(self.clients))] for _ in range(len(self.clients))]
 
@@ -396,7 +398,10 @@ class FjordAggregator(Aggregator):
             cluster_matrix = np.array(similarity_matrix)
             clusters = perform_kmeans_clustering(cluster_matrix, 10)
             print(clusters)
+            print(clientid)
+            my_dict = dict(zip(clientid, clusters))
 
+            print(my_dict)
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
             fjord_average_learners(learners, learner, weights=self.clients_weights)
