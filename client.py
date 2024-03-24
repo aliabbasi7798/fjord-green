@@ -61,7 +61,7 @@ class Client(object):
     ):
         rng_seed = (seed if (seed is not None and seed >= 0) else int(time.time()))
         self.rng = random.Random(rng_seed)
-
+        self.cluster_id = 0
         self.learners_ensemble = learners_ensemble
         self.n_learners = len(self.learners_ensemble)
         self.tune_locally = tune_locally

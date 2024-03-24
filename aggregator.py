@@ -126,7 +126,7 @@ class Aggregator(ABC):
         self.write_logs()
 
         self.k = k
-
+        self.cluster_dict = {}
     @abstractmethod
     def mix(self):
         pass
@@ -279,7 +279,23 @@ class Aggregator(ABC):
                 )
         else:
             self.sampled_clients = self.rng.sample(self.clients, k=self.n_clients_per_round)
+        test = []
+        for client in self.clients:
+            test.append([client.clientID,client.cluster_id ,client.carbonIntensity])
+        print(test)
+        if self.sampling_rate < 0.5 :
+            print(self.cluster_dict)
+            for i, client in enumerate(self.sampled_clients):
+                if client.carbonIntensity > 200:
+                    # Find the client with the lowest carbon intensity in the same cluster
+                    least_intense_client = min(self.cluster_dict[client.cluster_id], key=lambda x: x.carbonIntensity)
+                    # Replace the current client with the one with the lowest carbon intensity in the same cluster
+                    self.sampled_clients[i] = least_intense_client
 
+        test = []
+        for client in self.clients:
+            test.append([client.clientID, client.cluster_id, client.carbonIntensity])
+        print(test)
 
 class NoCommunicationAggregator(Aggregator):
     r"""Clients do not communicate. Each client work locally
@@ -351,14 +367,6 @@ class FjordAggregator(Aggregator):
     def mix(self):
         tr_acc, tr_round, test_acc, test_round = [], [], [], []
         self.sample_clients()
-        id_test = []
-        for client in self.sampled_clients:
-            id_test.append(client.clientID)
-        print(id_test)
-        id_test1 = []
-        for client in self.clients:
-            id_test1.append(client.clientID)
-        print(id_test1)
         timeArr =[]
         pArr=[]
         energyC = []
@@ -401,9 +409,8 @@ class FjordAggregator(Aggregator):
 
             cluster_matrix = np.array(similarity_matrix)
             clusters = perform_kmeans_clustering(cluster_matrix, 10)
-            print(clusters)
-            print(clientid)
             my_dict = dict(zip(clientid, clusters))
+            self.cluster_dict = my_dict
 
             print(my_dict)
         for learner_id, learner in enumerate(self.global_learners_ensemble):
