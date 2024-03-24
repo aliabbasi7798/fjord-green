@@ -355,6 +355,10 @@ class FjordAggregator(Aggregator):
         for client in self.sampled_clients:
             id_test.append(client.clientID)
         print(id_test)
+        id_test1 = []
+        for client in self.clients:
+            id_test1.append(client.clientID)
+        print(id_test1)
         timeArr =[]
         pArr=[]
         energyC = []
