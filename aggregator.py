@@ -286,9 +286,7 @@ class Aggregator(ABC):
         print(test)
         if self.sampling_rate < 0.5 :
             print(self.cluster_dict)
-            for client in self.sampled_clients:
-                if client.carbonIntensity > 200:
-                    for
+
 
 
         test = []
@@ -416,15 +414,14 @@ class FjordAggregator(Aggregator):
 
             for client in self.clients:
                 client.cluster_id = self.cluster_dict[client.clientID]
-                for i in range(number_cluster):
-                    temp_cluster = []
+            for i in range(number_cluster):
                     min_intensity = 1000
                     for client in self.clients:
                         if client.cluster_id == i:
                             if client.carbonIntensity < min_intensity:
+                                self.cluster_clients[i] =  client
 
-
-                self.cluster_clients[i]
+            print(self.cluster_clients)
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
             fjord_average_learners(learners, learner, weights=self.clients_weights)
