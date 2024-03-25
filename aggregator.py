@@ -417,9 +417,12 @@ class FjordAggregator(Aggregator):
             for client in self.clients:
                 client.cluster_id = self.cluster_dict[client.clientID]
                 for i in range(number_cluster):
-                    temp_custer = []
+                    temp_cluster = []
+                    min_intensity = 1000
                     for client in self.clients:
                         if client.cluster_id == i:
+                            if client.carbonIntensity < min_intensity:
+
 
                 self.cluster_clients[i]
         for learner_id, learner in enumerate(self.global_learners_ensemble):
