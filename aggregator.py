@@ -127,6 +127,7 @@ class Aggregator(ABC):
 
         self.k = k
         self.cluster_dict = {}
+        self.cluster_clients = {}
     @abstractmethod
     def mix(self):
         pass
@@ -285,12 +286,10 @@ class Aggregator(ABC):
         print(test)
         if self.sampling_rate < 0.5 :
             print(self.cluster_dict)
-            for i, client in enumerate(self.sampled_clients):
+            for client in self.sampled_clients:
                 if client.carbonIntensity > 200:
-                    # Find the client with the lowest carbon intensity in the same cluster
-                    least_intense_client = min(self.cluster_dict[client.cluster_id], key=lambda x: x.carbonIntensity)
-                    # Replace the current client with the one with the lowest carbon intensity in the same cluster
-                    self.sampled_clients[i] = least_intense_client
+                    for
+
 
         test = []
         for client in self.clients:
@@ -383,6 +382,7 @@ class FjordAggregator(Aggregator):
 
         print(self.sampling_rate)
         clusters = []
+        number_cluster = 10
         if self.sampling_rate > 0.5:
             weights_arr=[]
             clientid =[]
@@ -408,11 +408,20 @@ class FjordAggregator(Aggregator):
                         similarity_matrix[j][i] = similarity_score
 
             cluster_matrix = np.array(similarity_matrix)
-            clusters = perform_kmeans_clustering(cluster_matrix, 10)
+            clusters = perform_kmeans_clustering(cluster_matrix, number_cluster)
             my_dict = dict(zip(clientid, clusters))
             self.cluster_dict = my_dict
 
             print(my_dict)
+
+            for client in self.clients:
+                client.cluster_id = self.cluster_dict[client.clientID]
+                for i in range(number_cluster):
+                    temp_custer = []
+                    for client in self.clients:
+                        if client.cluster_id == i:
+
+                self.cluster_clients[i]
         for learner_id, learner in enumerate(self.global_learners_ensemble):
             learners = [client.learners_ensemble[learner_id] for client in self.clients]
             fjord_average_learners(learners, learner, weights=self.clients_weights)
